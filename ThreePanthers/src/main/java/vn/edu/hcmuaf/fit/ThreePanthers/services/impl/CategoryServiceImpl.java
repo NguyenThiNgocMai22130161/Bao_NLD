@@ -29,7 +29,7 @@ public class CategoryServiceImpl implements CategoryService{
         CategoryResponseDto res = new CategoryResponseDto();
         res.setId(e.getId());
         res.setName(e.getName());
-        res.setPosition(e.getPosition());
+        res.setPosition(e.getPosition() == null ? 0 : e.getPosition());
         res.setSlug(e.getSlug());
 
         if (e.getChildren() != null && !e.getChildren().isEmpty()) {

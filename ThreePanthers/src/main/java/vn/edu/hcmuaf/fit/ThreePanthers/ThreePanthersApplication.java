@@ -9,5 +9,4 @@ public class ThreePanthersApplication {
   public static void main(String[] args) {
     SpringApplication.run(ThreePanthersApplication.class, args);
   }
-
 }
