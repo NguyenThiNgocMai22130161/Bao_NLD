@@ -12,6 +12,6 @@ public class CategoryResponseDto {
     private String id;
     private String name;
     private String slug;
-    private int position;
+    private Integer position;
     private List<CategoryResponseDto> children = new ArrayList<>();
 }

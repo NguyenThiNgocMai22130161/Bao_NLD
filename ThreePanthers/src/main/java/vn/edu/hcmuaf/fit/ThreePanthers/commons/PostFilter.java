@@ -1,6 +1,11 @@
 package vn.edu.hcmuaf.fit.ThreePanthers.commons;
 
+import java.time.LocalDate;
 import java.util.List;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,4 +20,6 @@ public class PostFilter {
     private Boolean isFeatured;
     private PostType type;
     private String keyword;
+
+    private String publishDate;
 }

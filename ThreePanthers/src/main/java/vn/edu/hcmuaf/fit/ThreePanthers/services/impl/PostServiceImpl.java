@@ -1,5 +1,6 @@
 package vn.edu.hcmuaf.fit.ThreePanthers.services.impl;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +43,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostDetailResponseDto getPostDetail(String slug) {
         PostEntity e = postRepository.findBySlug(slug);
-        if (e == null)
+        if (e == null || e.getContent() == null)
             throw new ResourceNotFoundException("Không tìm thấy bài viết");
 
         //check xem co user dang nhap ko cho phan loging view
@@ -112,7 +113,10 @@ public class PostServiceImpl implements PostService {
 
     private Specification<PostEntity> createSpecification(PostFilter filter) {
         return (root, query, cb) -> {
-            List<Predicate> predicates = new ArrayList<>();
+            List<Predicate> predicates = new ArrayList<>();            
+            // 1. - post content = NULL or ""
+            predicates.add(cb.isNotNull(root.get("content")));
+            predicates.add(cb.notEqual(root.get("content"), ""));                 
 
             if (filter.getCategoriesSlug() != null && !filter.getCategoriesSlug().isEmpty()) {
                 Join<PostEntity, CategoryEntity> categoryJoin = root.join("category");
@@ -142,6 +146,22 @@ public class PostServiceImpl implements PostService {
                 predicates.add(cb.or(titleLike, summaryLike));
             }
 
+            // (PUBLISH DATE) 
+            if (filter.getPublishDate() != null && !filter.getPublishDate().isEmpty()) {
+            try {
+                LocalDate date = LocalDate.parse(filter.getPublishDate());
+
+                LocalDateTime startOfDay = date.atStartOfDay();
+                LocalDateTime endOfDay = date.atTime(23, 59, 59, 999999999);
+
+                predicates.add(cb.between(root.get("publishedAt"), startOfDay, endOfDay));
+                
+                System.out.println("Đang lọc ngày: " + date);
+                
+            } catch (Exception e) {
+                System.err.println("Lỗi định dạng ngày: " + filter.getPublishDate());
+            }
+        }
             return cb.and(predicates.toArray(new Predicate[0]));
         };
     }
@@ -155,6 +175,8 @@ public class PostServiceImpl implements PostService {
         dto.setPublishedAt(e.getPublishedAt());
         dto.setViewCount(e.getViewCount());
         dto.setIsFeatured(e.getIsFeatured());
+        dto.setSlug(e.getSlug());
+        dto.setContent(e.getContent());
 
         if (e.getAuthor() != null) {
             dto.setAuthor(e.getAuthor().getUsername());
