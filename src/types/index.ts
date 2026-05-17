@@ -92,6 +92,7 @@ export interface PageData<T> {
   totalPages: number;
   items: T[];
 }
+
 export interface LoginRequest {
   identifier: string;
   password: string;
@@ -102,6 +103,11 @@ export interface RegisterRequest {
   email: string;
   password: string;
 }
+
+export interface VerifyRequest {
+  email: string;
+  verificationCode: string;
+}
 export interface ForgotPasswordRequest {
   email: string;
 }
@@ -111,5 +117,4 @@ export interface ResetPasswordRequest {
   newPassword: string;
   confirmPassword: string;
 }
-
 export type PaginatedApiResponse<T> = ApiResponse<PageData<T>>;

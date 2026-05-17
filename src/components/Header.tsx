@@ -1,5 +1,13 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+} from "@heroui/dropdown";
+import { Avatar, Button } from "@heroui/react";
+
+import { useAuth } from "@/contexts/AuthContext";
 
 const Header = () => {
   const today = new Date().toLocaleDateString("vi-VN", {
@@ -27,6 +35,14 @@ const Header = () => {
     { name: "GIA ĐÌNH", path: "/gia-dinh" },
     { name: "ĐỊA ỐC", path: "/dia-oc" },
   ];
+
+  const { user, isLoggedIn, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
   return (
     <header className="w-full">
@@ -73,20 +89,56 @@ const Header = () => {
               </button>
             </div>
 
-            <button className="text-gray-400 hover:text-blue-600 p-2 border border-gray-300 rounded-full">
-              <svg
-                className="w-6 h-6"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
+            {isLoggedIn ? (
+              <Dropdown placement="bottom-end">
+                <DropdownTrigger>
+                  <Avatar
+                    isBordered
+                    as="button"
+                    className="transition-transform"
+                    classNames={{
+                      base: "bg-[#004b9a] text-white ring-[#004b9a]",
+                    }}
+                    color="primary"
+                    name={user?.username}
+                    size="sm"
+                  />
+                </DropdownTrigger>
+                <DropdownMenu aria-label="Profile Actions" variant="flat">
+                  <DropdownItem key="profile" className="h-14 gap-2">
+                    <p className="font-semibold">Xin chào,</p>
+                    <p className="font-semibold text-[#004b9a] uppercase">
+                      {user?.username}
+                    </p>
+                  </DropdownItem>
+                  <DropdownItem key="user_profile" href="/profile">
+                    Hồ sơ cá nhân
+                  </DropdownItem>
+                  <DropdownItem key="history" href="/history">
+                    Lịch sử xem
+                  </DropdownItem>
+                  <DropdownItem key="saved" href="/saved">
+                    Tin đã lưu
+                  </DropdownItem>
+                  <DropdownItem
+                    key="logout"
+                    color="danger"
+                    onPress={handleLogout}
+                  >
+                    Đăng xuất
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            ) : (
+              <Button
+                className="bg-[#004b9a] text-white font-bold"
+                radius="full"
+                size="md"
+                onPress={() => navigate("/auth")}
               >
-                <path
-                  clipRule="evenodd"
-                  d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z"
-                  fillRule="evenodd"
-                />
-              </svg>
-            </button>
+                Đăng nhập
+              </Button>
+            )}
 
             <button className="hidden sm:flex items-center gap-2 bg-[#2d87f0] hover:bg-blue-700 text-white px-4 py-2 rounded-full font-bold text-sm transition-colors">
               Đăng ký gói bạn đọc VIP
@@ -140,4 +192,3 @@ const Header = () => {
 };
 
 export default Header;
-

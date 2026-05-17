@@ -5,6 +5,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import AuthPage from "./pages/Auth";
 import { AuthProvider } from "./contexts/AuthContext";
+
 import IndexPage from "@/pages/index";
 function App() {
   return (
