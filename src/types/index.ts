@@ -92,6 +92,16 @@ export interface PageData<T> {
   totalPages: number;
   items: T[];
 }
+export interface LoginRequest {
+  identifier: string;
+  password: string;
+}
+
+export interface RegisterRequest {
+  username: string;
+  email: string;
+  password: string;
+}
 export interface ForgotPasswordRequest {
   email: string;
 }
