@@ -1,14 +1,10 @@
 package vn.edu.hcmuaf.fit.ThreePanthers.controllers;
 
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.hcmuaf.fit.ThreePanthers.commons.SuccessResponse;
-import vn.edu.hcmuaf.fit.ThreePanthers.dtos.req.UpdateProfileRequestDto;
 import vn.edu.hcmuaf.fit.ThreePanthers.dtos.res.CommentResponseDto;
 import vn.edu.hcmuaf.fit.ThreePanthers.dtos.res.PostSummaryResponseDto;
-import vn.edu.hcmuaf.fit.ThreePanthers.dtos.res.UserResponseDto;
 import vn.edu.hcmuaf.fit.ThreePanthers.services.UserService;
 
 import java.util.List;
@@ -19,26 +15,6 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-
-     @PutMapping("/profile")
-    public SuccessResponse<UserResponseDto> updateProfile(@RequestBody UpdateProfileRequestDto req) {
-        return SuccessResponse.<UserResponseDto>builder()
-                .status(200)
-                .message("Cập nhật thông tin thành công")
-                .data(userService.updateProfile(req))
-                .build();
-    }
-
-    @GetMapping("/get-me")
-    public SuccessResponse<UserResponseDto> getMe(){
-        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-        
-        return SuccessResponse.<UserResponseDto>builder()
-        .status(200)
-        .message("get me successfuly")
-        .data(userService.getMe(userName))
-        .build();
-    }
 
     @PostMapping("/saved-posts/{slug}")
     public SuccessResponse<String> toggleSavedPost(@PathVariable String slug) {
