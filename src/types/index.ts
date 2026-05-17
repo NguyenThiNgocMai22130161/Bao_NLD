@@ -92,5 +92,14 @@ export interface PageData<T> {
   totalPages: number;
   items: T[];
 }
+export interface ForgotPasswordRequest {
+  email: string;
+}
+export interface ResetPasswordRequest {
+  email: string;
+  otp: string;
+  newPassword: string;
+  confirmPassword: string;
+}
 
 export type PaginatedApiResponse<T> = ApiResponse<PageData<T>>;
