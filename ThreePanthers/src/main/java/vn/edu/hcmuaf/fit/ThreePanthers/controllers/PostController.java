@@ -1,5 +1,6 @@
 package vn.edu.hcmuaf.fit.ThreePanthers.controllers;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,7 @@ import vn.edu.hcmuaf.fit.ThreePanthers.services.PostService;
 
 @RestController
 @RequestMapping("/api/posts")
+@CrossOrigin("*")
 @RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
