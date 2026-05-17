@@ -7,10 +7,8 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Getter
 @Setter
-
 public class CommentResponseDto {
     private String id;
     private String content;

@@ -45,7 +45,6 @@ public class AuthService {
         user.setStatus(UserStatus.INACTIVE); 
 
         String code = String.valueOf(new Random().nextInt(900000) + 100000);
-
         user.setVerificationCode(code);
         user.setVerificationExpiration(LocalDateTime.now().plusMinutes(15)); 
 
