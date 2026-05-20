@@ -118,3 +118,7 @@ export interface ResetPasswordRequest {
   confirmPassword: string;
 }
 export type PaginatedApiResponse<T> = ApiResponse<PageData<T>>;
+
+xport interface CommentRequest {
+  content: string;
+  parentId?: string; // Dùng khi trả lời bình luận (Reply)
