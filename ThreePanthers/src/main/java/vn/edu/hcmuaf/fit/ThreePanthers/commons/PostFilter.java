@@ -15,4 +15,7 @@ public class PostFilter {
     private Boolean isFeatured;
     private PostType type;
     private String keyword;
+
+    private String publishDate;
+
 }
