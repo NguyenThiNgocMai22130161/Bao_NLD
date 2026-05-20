@@ -83,7 +83,7 @@ export const CategoryNews = ({ categoriesSlug }: CategoryNewsProps) => {
         <div className="flex items-center">
           <div className="w-1.5 h-6 bg-orange-500 mr-3" />
           <h2 className="text-xl font-bold uppercase text-blue-900">
-            Tin mới cùng chuyên mục
+            Tin tức qua ngày
           </h2>
         </div>
 

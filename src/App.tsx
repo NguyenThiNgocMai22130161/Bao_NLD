@@ -1,3 +1,5 @@
+import { Route, Routes } from 'react-router-dom';
+
 import TopBanner from './components/index/TopBanner';
 import Header from './components/index/Header';
 import Footer from './components/index/Footer';
@@ -6,7 +8,6 @@ import { AuthProvider } from './contexts/AuthContext';
 
 import IndexPage from '@/pages/index';
 import PostDetailPage from '@/pages/PostDetailPage';
-
 
 function App() {
   return (

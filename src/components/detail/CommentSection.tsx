@@ -3,9 +3,8 @@ import { MessageSquare, Send, ThumbsUp, Reply } from 'lucide-react';
 import { Spinner } from '@heroui/react';
 
 import { commentService } from '@/services/comment.service';
-import { Comment } from '@/types'; // Import từ file index.ts của Han
+import { Comment } from '@/types';
 
-// Format ngày tháng
 const formatDate = (dateString: string) => {
   if (!dateString) return '';
   const date = new Date(dateString);
@@ -19,9 +18,7 @@ const formatDate = (dateString: string) => {
   }).format(date);
 };
 
-// Component hiển thị từng item comment (để hỗ trợ đệ quy reply)
 const CommentItem = ({ comment }: { comment: Comment }) => {
-  // Lấy chữ cái đầu làm avatar
   const initial = comment.user ? comment.user.charAt(0).toUpperCase() : '?';
 
   return (
@@ -43,7 +40,6 @@ const CommentItem = ({ comment }: { comment: Comment }) => {
             {comment.content}
           </p>
         </div>
-
         <div className="flex items-center gap-4 mt-2 ml-2">
           <button className="flex items-center gap-1 text-xs font-semibold text-gray-500 hover:text-blue-600 transition-colors">
             <ThumbsUp size={14} /> Thích
@@ -52,8 +48,7 @@ const CommentItem = ({ comment }: { comment: Comment }) => {
             <Reply size={14} /> Phản hồi
           </button>
         </div>
-
-        {/* Đệ quy: Nếu có replies thì hiển thị tiếp bên dưới */}
+        {/* Recursion for replies */}
         {comment.replies && comment.replies.length > 0 && (
           <div className="mt-4 pl-4 border-l-2 border-gray-100 space-y-4">
             {comment.replies.map((reply) => (
@@ -80,7 +75,7 @@ export const CommentSection = ({ postId }: { postId: string }) => {
         setLoading(true);
         const res = await commentService.getCommentsByPost(postId);
 
-        // res.data chứa mảng Comment[]
+        // res.data Comment[]
         if (res && res.data) {
           setComments(res.data);
         }
@@ -99,13 +94,12 @@ export const CommentSection = ({ postId }: { postId: string }) => {
     e.preventDefault();
     if (!newComment.trim()) return;
 
-    // Kiểm tra đăng nhập (đơn giản bằng cách check token trong localStorage)
     const token = localStorage.getItem('accessToken');
 
     if (!token) {
       alert('Bạn cần đăng nhập để bình luận!');
 
-      // Chuyển hướng login nếu cần: window.location.href = '/login';
+      // window.location.href = '/login';
       return;
     }
 
@@ -115,10 +109,8 @@ export const CommentSection = ({ postId }: { postId: string }) => {
         content: newComment,
       });
 
-      // Nếu thành công (res.data chứa Comment vừa tạo)
       if (res && res.data) {
-        setComments([res.data, ...comments]); // Thêm vào đầu danh sách
-        setNewComment('');
+        setComments([res.data, ...comments]);
       }
     } catch (error) {
       console.error('Lỗi gửi bình luận:', error);
@@ -146,7 +138,7 @@ export const CommentSection = ({ postId }: { postId: string }) => {
 
       {/* Input Form */}
       <form className="mb-8 flex gap-4" onSubmit={handleSubmit}>
-        {/* Avatar user hiện tại (Placeholder) */}
+        {/* Avatar user */}
         <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold border border-blue-200 shrink-0">
           Me
         </div>
