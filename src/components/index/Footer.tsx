@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 export const Footer = () => {
   const [showTop, setShowTop] = useState(false);
@@ -7,13 +7,13 @@ export const Footer = () => {
   useEffect(() => {
     const handleScroll = () => setShowTop(window.scrollY > 200);
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
 
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
@@ -27,22 +27,22 @@ export const Footer = () => {
           </Link>
           <div className="flex flex-wrap gap-x-5.5 gap-y-2 text-sm font-medium text-gray-600">
             {[
-              "Thời sự",
-              "Quốc tế",
-              "Lao động",
-              "Bạn đọc",
-              "Kinh tế",
-              "Sức khỏe",
-              "Giáo dục",
-              "Pháp luật",
-              "Văn hóa - Văn nghệ",
-              "Giải trí",
-              "Thể thao",
-              "AI 365",
-              "Du lịch xanh",
-              "Phụ nữ",
-              "Gia đình",
-              "Địa ốc",
+              'Thời sự',
+              'Quốc tế',
+              'Lao động',
+              'Bạn đọc',
+              'Kinh tế',
+              'Sức khỏe',
+              'Giáo dục',
+              'Pháp luật',
+              'Văn hóa - Văn nghệ',
+              'Giải trí',
+              'Thể thao',
+              'AI 365',
+              'Du lịch xanh',
+              'Phụ nữ',
+              'Gia đình',
+              'Địa ốc',
             ].map((item) => (
               <Link
                 key={item}
@@ -81,7 +81,7 @@ export const Footer = () => {
               Đường số 6, Phường Linh Trung, TP Thủ Đức, TPHCM
             </p>
             <p className="mb-1">
-              Điện thoại: <span className="text-blue-600">098-765.4321</span> /{" "}
+              Điện thoại: <span className="text-blue-600">098-765.4321</span> /{' '}
               <span className="text-blue-600">012-345.6789</span>
             </p>
             <p className="mb-4">
@@ -93,7 +93,7 @@ export const Footer = () => {
             </h4>
             <p>LIÊN HỆ QUẢNG CÁO BÁO ĐIỆN TỬ</p>
             <p>
-              Email:{" "}
+              Email:{' '}
               <span className="text-gray-600">
                 lienhequangbadoanhnghiep@gmail.com
               </span>
@@ -108,7 +108,7 @@ export const Footer = () => {
             <div className="flex gap-3 mb-6">
               <a
                 className="w-8 h-8 rounded-full bg-[#1877F2] flex items-center justify-center text-white hover:opacity-80"
-                href="#"
+                href="https://www.facebook.com/nguoilaodong"
               >
                 <svg
                   className="w-5 h-5"
@@ -121,7 +121,7 @@ export const Footer = () => {
 
               <a
                 className="w-8 h-8 rounded-full bg-[#FF0000] flex items-center justify-center text-white hover:opacity-80"
-                href="#"
+                href="https://www.youtube.com/channel/UCzkyOx_0O1pGOqHiUMOe2KQ"
               >
                 <svg
                   className="w-5 h-5"
@@ -134,7 +134,7 @@ export const Footer = () => {
 
               <a
                 className="w-8 h-8 rounded-full bg-[#0068FF] flex items-center justify-center text-white font-bold text-xs hover:opacity-80"
-                href="#"
+                href="https://zalo.me/4417973660626754335"
               >
                 Zalo
               </a>
@@ -212,4 +212,3 @@ export const Footer = () => {
 };
 
 export default Footer;
-

@@ -1,7 +1,7 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { Post } from "@/types";
+import { Post } from '@/types';
 
 interface SidebarNewsListProps {
   title: string;
@@ -25,7 +25,7 @@ export const SidebarNewsList: React.FC<SidebarNewsListProps> = ({
           <li key={post.id} className="py-3">
             <a
               className="text-base font-medium hover:text-blue-600 cursor-pointer font-serif leading-snug line-clamp-2"
-              onClick={() => navigate(`/post/${post.slug}`)}
+              href={`/post/${post.slug}`}
             >
               {post.title}
             </a>
@@ -35,4 +35,3 @@ export const SidebarNewsList: React.FC<SidebarNewsListProps> = ({
     </div>
   );
 };
-
