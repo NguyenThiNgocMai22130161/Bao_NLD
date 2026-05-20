@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Dropdown,
@@ -6,9 +7,35 @@ import {
   DropdownTrigger,
 } from "@heroui/dropdown";
 import { Avatar, Button } from "@heroui/react";
+import {
+  HomeIcon,
+  PlayIcon,
+  PhotoIcon,
+  DocumentTextIcon,
+  ChartBarIcon,
+  LightBulbIcon,
+  MegaphoneIcon,
+  StarIcon,
+  GlobeAltIcon,
+  EnvelopeIcon,
+  BuildingOffice2Icon,
+  RectangleGroupIcon,
+  MagnifyingGlassIcon,
+} from "@heroicons/react/24/outline";
+import { FaFacebookF, FaYoutube, FaRss } from "react-icons/fa";
+import { SiZalo } from "react-icons/si";
 
 import { useAuth } from "@/contexts/AuthContext";
 
+/* ------------------ utils ------------------ */
+const slugify = (text: string) =>
+  text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, "-");
+
+/* ------------------ component ------------------ */
 const Header = () => {
   const today = new Date().toLocaleDateString("vi-VN", {
     weekday: "long",
@@ -17,177 +44,231 @@ const Header = () => {
     day: "numeric",
   });
 
-  const menuItems = [
-    { name: "THỜI SỰ", path: "/thoi-su" },
-    { name: "QUỐC TẾ", path: "/quoc-te" },
-    { name: "LAO ĐỘNG", path: "/lao-dong" },
-    { name: "BẠN ĐỌC", path: "/ban-doc" },
-    { name: "KINH TẾ", path: "/kinh-te" },
-    { name: "SỨC KHỎE", path: "/suc-khoe" },
-    { name: "GIÁO DỤC", path: "/giao-duc" },
-    { name: "PHÁP LUẬT", path: "/phap-luat" },
-    { name: "VĂN HÓA - VĂN NGHỆ", path: "/van-hoa-van-nghe" },
-    { name: "GIẢI TRÍ", path: "/giai-tri" },
-    { name: "THỂ THAO", path: "/the-thao" },
-    { name: "AI 365", path: "/ai-365" },
-    { name: "DU LỊCH XANH", path: "/du-lich-xanh" },
-    { name: "PHỤ NỮ", path: "/phu-nu" },
-    { name: "GIA ĐÌNH", path: "/gia-dinh" },
-    { name: "ĐỊA ỐC", path: "/dia-oc" },
-  ];
-
+  const [showMegaMenu, setShowMegaMenu] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const { user, isLoggedIn, logout } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
-    navigate("/");
+  /* -------- search -------- */
+  const executeSearch = () => {
+    if (searchTerm.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
+      setShowMegaMenu(false);
+    }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") executeSearch();
+  };
+
+  /* -------- main menu -------- */
+  const menuItems = [
+    { label: "THỜI SỰ", slug: "thoi-su" },
+    { label: "QUỐC TẾ", slug: "quoc-te" },
+    { label: "LAO ĐỘNG", slug: "lao-dong" },
+    { label: "BẠN ĐỌC", slug: "ban-doc" },
+    { label: "NET ZERO", slug: "net-zero" },
+    { label: "KINH TẾ", slug: "kinh-te" },
+    { label: "SỨC KHỎE", slug: "suc-khoe" },
+    { label: "GIÁO DỤC", slug: "giao-duc" },
+    { label: "PHÁP LUẬT", slug: "phap-luat" },
+    { label: "VĂN HÓA - VĂN NGHỆ", slug: "van-hoa-van-nghe" },
+    { label: "GIẢI TRÍ", slug: "giai-tri" },
+    { label: "THỂ THAO", slug: "the-thao" },
+    { label: "AI 365", slug: "ai-365" },
+    { label: "PHỤ NỮ", slug: "phu-nu" },
+    { label: "GIA ĐÌNH", slug: "gia-dinh" },
+    { label: "ĐỊA ỐC", slug: "dia-oc" },
+  ];
+
+  /* -------- mega menu -------- */
+  const primaryMenus = [
+    { title: "Thời sự", items: ["Chính trị", "Xã hội", "Đô thị"] },
+    { title: "Quốc tế", items: ["Người Việt đó đây", "Hay - lạ", "Vấn đề nóng"] },
+    { title: "Lao động", items: ["Công đoàn - Công nhân", "Việc làm", "An sinh xã hội"] },
+    { title: "Bạn đọc", items: ["Cuộc sống nhân ái", "Tôi lên tiếng", "Góc ảnh bạn đọc"] },
+    { title: "Net Zero", items: ["Tin tức & Xu hướng", "Chuyển đổi xanh", "Sống xanh", "Cẩm nang"] },
+    { title: "Kinh tế", items: ["Kinh doanh", "Tiêu dùng", "Ôtô - Xe - Điện máy", "Bất động sản", "Tài chính-Chứng khoán"] },
+    { title: "Sức khỏe", items: ["Chuyển động y học", "Giới tính", "Bác sĩ của bạn", "Khỏe và đẹp"] },
+    { title: "Giáo dục", items: ["Du học", "Tuyển sinh", "Sau bục giảng"] },
+    { title: "Pháp luật", items: ["Luật sư của bạn", "Truy nã", "Chuyện pháp đình"] },
+    { title: "Văn hóa - Văn nghệ", items: ["Âm nhạc", "Văn học", "Sân khấu", "Điện ảnh"] },
+    { title: "Giải trí", items: ["Hậu trường showbiz", "Chuyện của sao"] },
+    { title: "Thể thao", items: ["Bóng đá", "Golf", "Tennis", "Marathon"] },
+    { title: "AI 365", items: ["Công nghệ số", "Bảo mật", "Mạng xã hội"] },
+    { title: "Phụ nữ", items: ["Khỏe-đẹp", "Tâm sự", "Món ngon", "Video"] },
+    { title: "Gia đình", items: ["Cha mẹ và con cái", "Không gian sống"] },
+    { title: "Địa ốc", items: ["Dự án", "Thị trường", "Nhà đẹp"] },
+  ];
+
+  const featureLinks = [
+    { label: "Video", icon: <PlayIcon className="w-5 h-5 text-blue-600" /> },
+    { label: "Photo", icon: <PhotoIcon className="w-5 h-5 text-blue-600" /> },
+    { label: "Longform", icon: <DocumentTextIcon className="w-5 h-5 text-blue-600" /> },
+    { label: "Infographic", icon: <ChartBarIcon className="w-5 h-5 text-blue-600" /> },
+  ];
+
   return (
-    <header className="w-full">
-      <div className="bg-white py-4 border-b border-gray-200">
-        <div className="container mx-auto w-full flex flex-wrap items-center justify-between px-4">
-          <div className="flex items-center gap-6">
-            <Link className="flex items-center" to="/">
-              <h1 className="text-[#d80f1e] font-black text-4xl sm:text-5xl tracking-tighter uppercase font-sans">
+    <>
+      {/* HEADER TOP */}
+      <header className="w-full">
+        <div className="bg-white border-b">
+          <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+            <div className="flex items-center gap-6">
+              <Link to="/" className="text-[#d80f1e] font-black text-4xl uppercase">
                 NGƯỜI LAO ĐỘNG
-              </h1>
-            </Link>
-            <div className="hidden lg:flex flex-col border-l border-gray-300 pl-4 gap-1">
-              <span className="text-xs font-bold text-blue-800">
-                NGƯỜI LAO ĐỘNG News
-              </span>
-              <span className="text-sm text-gray-500 font-medium capitalize">
-                {today}
-              </span>
-            </div>
-          </div>
+              </Link>
 
-          <div className="flex items-center gap-4 mt-4 lg:mt-0">
-            <div className="relative hidden md:block">
-              <input
-                className="pl-4 pr-10 py-2 border border-gray-300 rounded-full text-sm focus:outline-none focus:border-blue-500 w-48 lg:w-64"
-                placeholder="Tìm kiếm"
-                type="text"
-              />
-              <button className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-blue-600">
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
+              <div className="hidden lg:flex flex-col border-l pl-4">
+                <span className="text-xs font-bold text-blue-800">
+                  NGƯỜI LAO ĐỘNG News
+                </span>
+                <span className="text-sm text-gray-500">{today}</span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <div className="hidden md:block relative">
+                <input
+                  className="border rounded-full pl-4 pr-10 py-2 text-sm w-64"
+                  placeholder="Tìm kiếm..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                />
+                <button
+                  className="absolute right-3 top-1/2 -translate-y-1/2"
+                  onClick={executeSearch}
                 >
-                  <path
-                    d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
+                  <MagnifyingGlassIcon className="w-5 h-5" />
+                </button>
+              </div>
+
+              {isLoggedIn ? (
+                <Dropdown placement="bottom-end">
+                  <DropdownTrigger>
+                    <Avatar isBordered as="button" name={user?.username} size="sm" />
+                  </DropdownTrigger>
+                  <DropdownMenu>
+                    <DropdownItem key="logout" color="danger" onPress={logout}>
+                      Đăng xuất
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              ) : (
+                <Button
+                  className="bg-[#004b9a] text-white font-bold"
+                  radius="full"
+                  onPress={() => navigate("/auth")}
+                >
+                  Đăng nhập
+                </Button>
+              )}
             </div>
-
-            {isLoggedIn ? (
-              <Dropdown placement="bottom-end">
-                <DropdownTrigger>
-                  <Avatar
-                    isBordered
-                    as="button"
-                    className="transition-transform"
-                    classNames={{
-                      base: "bg-[#004b9a] text-white ring-[#004b9a]",
-                    }}
-                    color="primary"
-                    name={user?.username}
-                    size="sm"
-                  />
-                </DropdownTrigger>
-                <DropdownMenu aria-label="Profile Actions" variant="flat">
-                  <DropdownItem key="profile" className="h-14 gap-2">
-                    <p className="font-semibold">Xin chào,</p>
-                    <p className="font-semibold text-[#004b9a] uppercase">
-                      {user?.username}
-                    </p>
-                  </DropdownItem>
-                  <DropdownItem key="user_profile" href="/profile">
-                    Hồ sơ cá nhân
-                  </DropdownItem>
-                  <DropdownItem key="history" href="/history">
-                    Lịch sử xem
-                  </DropdownItem>
-                  <DropdownItem key="saved" href="/saved">
-                    Tin đã lưu
-                  </DropdownItem>
-                  <DropdownItem
-                    key="logout"
-                    color="danger"
-                    onPress={handleLogout}
-                  >
-                    Đăng xuất
-                  </DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
-            ) : (
-              <Button
-                className="bg-[#004b9a] text-white font-bold"
-                radius="full"
-                size="md"
-                onPress={() => navigate("/auth")}
-              >
-                Đăng nhập
-              </Button>
-            )}
-
-            <button className="hidden sm:flex items-center gap-2 bg-[#2d87f0] hover:bg-blue-700 text-white px-4 py-2 rounded-full font-bold text-sm transition-colors">
-              Đăng ký gói bạn đọc VIP
-            </button>
-            <button className="hidden sm:flex items-center gap-2 bg-[#d80f1e] hover:bg-red-700 text-white px-4 py-2 rounded-full font-bold text-sm transition-colors">
-              E-paper
-            </button>
           </div>
         </div>
-      </div>
 
-      <div className="bg-[#004b9a] text-white w-full border-t border-blue-800">
-        <div className="container mx-auto px-4">
-          <ul className="flex items-center whitespace-nowrap overflow-hidden">
-            <li className="flex-shrink-0">
-              <Link
-                className="flex items-center px-2 py-2 hover:bg-blue-700 transition-colors"
-                to="/"
-              >
-                <svg
-                  className="w-7 h-7"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M11.47 3.84a.75.75 0 011.06 0l8.632 8.632a.75.75 0 01-1.06 1.06l-.352-.352V20.25a.75.75 0 01-.75.75h-3.375a.75.75 0 01-.75-.75V14.25H9.125v6a.75.75 0 01-.75.75H5a.75.75 0 01-.75-.75v-7.07l-.352.352a.75.75 0 01-1.06-1.06L11.47 3.84z" />
-                </svg>
-              </Link>
-            </li>
-
-            {/* Menu */}
-            {menuItems.map((item) => (
-              <li key={item.name} className="flex-shrink-0">
-                <Link
-                  className="flex items-center px-2 py-2 text-[12px] font-semibold uppercase hover:bg-blue-700 transition-colors"
-                  to={item.path}
-                >
-                  {item.name}
+        {/* MAIN NAV */}
+        <div className="bg-[#004b9a] text-white">
+          <div className="container mx-auto px-4">
+            <ul className="flex items-center whitespace-nowrap overflow-hidden">
+              <li>
+                <Link to="/" className="flex items-center px-2 py-2 hover:bg-blue-700">
+                  <HomeIcon className="w-6 h-6" />
                 </Link>
               </li>
-            ))}
 
-            <li className="ml-auto flex items-center justify-center px-2 py-2 cursor-pointer hover:bg-blue-700 flex-shrink-0">
-              <span className="text-xl font-bold pb-2">...</span>
-            </li>
-          </ul>
+              {menuItems.map((item) => (
+                <li key={item.slug}>
+                  <Link
+                    to={`/${item.slug}`}
+                    className="px-2 py-2 text-xs font-semibold uppercase hover:bg-blue-700 block"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+
+              <li className="ml-auto">
+                <button
+                  className="px-3 py-2 text-xl hover:bg-blue-700"
+                  onClick={() => setShowMegaMenu((v) => !v)}
+                >
+                  …
+                </button>
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+
+      {/* MEGA MENU */}
+      {showMegaMenu && (
+        <div className="bg-white border-b shadow-sm">
+          <div className="container mx-auto px-6 py-6 grid grid-cols-1 md:grid-cols-[1fr_320px] gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+              {primaryMenus.map((group) => {
+                const parentSlug = slugify(group.title);
+                return (
+                  <div key={group.title}>
+                    <h4 className="mb-3 font-semibold text-blue-800 uppercase text-sm">
+                      <Link to={`/${parentSlug}`} onClick={() => setShowMegaMenu(false)}>
+                        {group.title}
+                      </Link>
+                    </h4>
+                    <ul className="space-y-2">
+                      {group.items.map((item) => (
+                        <li key={item}>
+                          <Link
+                            to={`/${parentSlug}/${slugify(item)}`}
+                            onClick={() => setShowMegaMenu(false)}
+                            className="text-sm text-gray-700 hover:text-blue-600"
+                          >
+                            {item}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="border-l pl-6">
+              <h4 className="mb-4 font-semibold text-blue-800 uppercase text-sm">
+                Định dạng
+              </h4>
+
+              <div className="grid gap-3">
+                {featureLinks.map((item) => (
+                  <div key={item.label} className="flex items-center gap-3">
+                    {item.icon}
+                    <span>{item.label}</span>
+                  </div>
+                ))}
+              </div>
+
+              <hr className="my-6" />
+
+              <div className="flex items-center gap-4">
+                <a href="https://www.facebook.com/nguoilaodong" target="_blank" rel="noopener noreferrer">
+                  <FaFacebookF />
+                </a>
+                <a href="https://www.youtube.com/@nguoilaodong" target="_blank" rel="noopener noreferrer">
+                  <FaYoutube />
+                </a>
+                <a href="https://zalo.me" target="_blank" rel="noopener noreferrer">
+                  <SiZalo />
+                </a>
+                <a href="/rss">
+                  <FaRss />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
