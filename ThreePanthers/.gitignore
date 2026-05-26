@@ -37,4 +37,7 @@ docker-compose.yml
 # Environment variables
 .env
 
+# Local lint & format (Han only)
+.prettierrc
+eslint.config.mjs
 

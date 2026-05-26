@@ -1,26 +1,26 @@
-import { SVGProps } from "react";
+import { SVGProps } from 'react';
 
 export type IconSvgProps = SVGProps<SVGSVGElement> & {
   size?: number;
 };
 
 export enum UserRole {
-  ADMIN = "ADMIN",
-  EDITOR = "EDITOR",
-  REPORTER = "REPORTER",
-  USER = "USER",
+  ADMIN = 'ADMIN',
+  EDITOR = 'EDITOR',
+  REPORTER = 'REPORTER',
+  USER = 'USER',
 }
 export enum PostStatus {
-  DRAFT = "DRAFT",
-  PENDING = "PENDING",
-  PUBLISHED = "PUBLISHED",
-  REJECT = "REJECT",
+  DRAFT = 'DRAFT',
+  PENDING = 'PENDING',
+  PUBLISHED = 'PUBLISHED',
+  REJECT = 'REJECT',
 }
 export enum PostType {
-  STANDARD = "STANDARD",
-  VIDEO = "VIDEO",
-  GALLERY = "GALLERY",
-  MAGAZINE = "MAGAZINE",
+  STANDARD = 'STANDARD',
+  VIDEO = 'VIDEO',
+  GALLERY = 'GALLERY',
+  MAGAZINE = 'MAGAZINE',
 }
 export interface AuthResponse {
   token: string;
@@ -118,3 +118,8 @@ export interface ResetPasswordRequest {
   confirmPassword: string;
 }
 export type PaginatedApiResponse<T> = ApiResponse<PageData<T>>;
+
+export interface CommentRequest {
+  content: string;
+  parentId?: string;
+}
