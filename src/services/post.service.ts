@@ -1,24 +1,46 @@
-import apiClient from "./axios.client";
+// import apiClient from "./axios.client";
+// import { ApiResponse, PageData, Post, PostDetail, PostFilter } from "@/types";
 
+// export const postService = {
+//   getPosts: async (
+//     filter: PostFilter
+//   ): Promise<ApiResponse<PageData<Post>>> => {
+//     const response = await apiClient.post<ApiResponse<PageData<Post>>>(
+//       "/api/posts",
+//       filter
+//     );
+//     return response.data;
+//   },
+
+//   getPostDetail: async (
+//     slug: string
+//   ): Promise<ApiResponse<PostDetail>> => {
+//     const response = await apiClient.get<ApiResponse<PostDetail>>(
+//       `/api/posts/${slug}`
+//     );
+//     return response.data;
+//   },
+// };
+import apiClient from "./axios.client";
 import { ApiResponse, PageData, Post, PostDetail, PostFilter } from "@/types";
 
 export const postService = {
-  getPosts: async (filter: PostFilter) => {
+  getPosts: async (
+    filter: PostFilter
+  ): Promise<ApiResponse<PageData<Post>>> => {
     const response = await apiClient.post<ApiResponse<PageData<Post>>>(
-      "/posts",
-      filter,
+      "/api/posts",
+      filter
     );
-
-    console.log(response);
-
-    return response.data;
+    return response.data; // ✅ đúng
   },
 
-  getPostDetail: async (slug: string) => {
+  getPostDetail: async (
+    slug: string
+  ): Promise<ApiResponse<PostDetail>> => {
     const response = await apiClient.get<ApiResponse<PostDetail>>(
-      `/posts/${slug}`,
+      `/api/posts/${slug}`
     );
-
     return response.data;
   },
 };

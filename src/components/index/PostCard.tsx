@@ -1,3 +1,4 @@
+
 import { Card, CardHeader, CardBody, Image } from "@heroui/react";
 import { useNavigate } from "react-router-dom";
 
@@ -27,8 +28,9 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
       onPress={() => navigate(`/post/${post.slug}`)}
     >
       <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
+        {/* LABEL THEO CATEGORY THẬT TỪ BE */}
         <p className="text-tiny uppercase font-bold text-primary">
-          {post.category?.name || "Tin tức"}
+          {post.category?.name?.toUpperCase()}
         </p>
 
         <small className="text-default-500">
