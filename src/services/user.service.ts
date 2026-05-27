@@ -20,4 +20,9 @@ export const userService = {
 
     return response.data;
   },
+  getMyComments: async () => {
+    const response = await apiClient.get('/users/comments');
+
+    return response.data;
+  },
 };

@@ -14,6 +14,13 @@ import {
   DocumentTextIcon,
   ChartBarIcon,
   MagnifyingGlassIcon,
+  LightBulbIcon,
+  MegaphoneIcon,
+  StarIcon,
+  GlobeAltIcon,
+  EnvelopeIcon,
+  BuildingOffice2Icon,
+  RectangleGroupIcon,
 } from '@heroicons/react/24/outline';
 import { FaFacebookF, FaYoutube, FaRss } from 'react-icons/fa';
 import { SiZalo } from 'react-icons/si';
@@ -38,6 +45,8 @@ const Header = () => {
   });
 
   const [showMegaMenu, setShowMegaMenu] = useState(false);
+
+  /* -------- main menu (top blue bar) -------- */
   const [searchTerm, setSearchTerm] = useState('');
   const { user, isLoggedIn, logout } = useAuth();
   const navigate = useNavigate();
@@ -74,7 +83,7 @@ const Header = () => {
     { label: 'ĐỊA ỐC', slug: 'dia-oc' },
   ];
 
-  /* -------- mega menu -------- */
+  /* -------- mega menu (left) -------- */
   const primaryMenus = [
     { title: 'Thời sự', items: ['Chính trị', 'Xã hội', 'Đô thị'] },
     {
@@ -129,6 +138,7 @@ const Header = () => {
     { title: 'Địa ốc', items: ['Dự án', 'Thị trường', 'Nhà đẹp'] },
   ];
 
+  /* -------- format links (right mega menu) -------- */
   const featureLinks = [
     { label: 'Video', icon: <PlayIcon className="w-5 h-5 text-blue-600" /> },
     { label: 'Photo', icon: <PhotoIcon className="w-5 h-5 text-blue-600" /> },
@@ -144,7 +154,7 @@ const Header = () => {
 
   return (
     <>
-      {/* HEADER TOP */}
+      {/* ================= HEADER TOP ================= */}
       <header className="w-full">
         <div className="bg-white border-b">
           <div className="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -165,21 +175,10 @@ const Header = () => {
             </div>
 
             <div className="flex items-center gap-4">
-              <div className="hidden md:block relative">
-                <input
-                  className="border rounded-full pl-4 pr-10 py-2 text-sm w-64"
-                  placeholder="Tìm kiếm..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                />
-                <button
-                  className="absolute right-3 top-1/2 -translate-y-1/2"
-                  onClick={executeSearch}
-                >
-                  <MagnifyingGlassIcon className="w-5 h-5" />
-                </button>
-              </div>
+              <input
+                className="hidden md:block border rounded-full px-4 py-2 text-sm w-64"
+                placeholder="Tìm kiếm"
+              />
 
               {isLoggedIn ? (
                 <Dropdown placement="bottom-end">
@@ -187,6 +186,9 @@ const Header = () => {
                     <Avatar
                       isBordered
                       as="button"
+                      classNames={{
+                        base: 'bg-[#004b9a] text-white ring-[#004b9a]',
+                      }}
                       name={user?.username}
                       size="sm"
                     />
@@ -203,6 +205,13 @@ const Header = () => {
                       onPress={() => navigate('/history')}
                     >
                       Tin đã xem
+                    </DropdownItem>
+
+                    <DropdownItem
+                      key="opinions"
+                      onPress={() => navigate('/my-comments')}
+                    >
+                      Ý kiến của bạn
                     </DropdownItem>
                     <DropdownItem key="logout" color="danger" onPress={logout}>
                       Đăng xuất
@@ -222,7 +231,7 @@ const Header = () => {
           </div>
         </div>
 
-        {/* MAIN NAV */}
+        {/* ================= MAIN NAV ================= */}
         <div className="bg-[#004b9a] text-white">
           <div className="container mx-auto px-4">
             <ul className="flex items-center whitespace-nowrap overflow-hidden">
@@ -248,7 +257,7 @@ const Header = () => {
 
               <li className="ml-auto">
                 <button
-                  className="px-3 py-2 text-xl hover:bg-blue-700"
+                  className="px-3 py-2 text-xl font-bold hover:bg-blue-700"
                   onClick={() => setShowMegaMenu((v) => !v)}
                 >
                   …
@@ -259,10 +268,11 @@ const Header = () => {
         </div>
       </header>
 
-      {/* MEGA MENU */}
+      {/* ================= MEGA MENU ================= */}
       {showMegaMenu && (
         <div className="bg-white border-b shadow-sm">
           <div className="container mx-auto px-6 py-6 grid grid-cols-1 md:grid-cols-[1fr_320px] gap-8">
+            {/* LEFT */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
               {primaryMenus.map((group) => {
                 const parentSlug = slugify(group.title);
@@ -282,6 +292,7 @@ const Header = () => {
                         <li key={item}>
                           <Link
                             className="text-sm text-gray-700 hover:text-blue-600"
+                            className="block px-2 py-1 rounded text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600"
                             to={`/${parentSlug}/${slugify(item)}`}
                             onClick={() => setShowMegaMenu(false)}
                           >
@@ -295,6 +306,7 @@ const Header = () => {
               })}
             </div>
 
+            {/* RIGHT */}
             <div className="border-l pl-6">
               <h4 className="mb-4 font-semibold text-blue-800 uppercase text-sm">
                 Định dạng
@@ -302,17 +314,73 @@ const Header = () => {
 
               <div className="grid gap-3">
                 {featureLinks.map((item) => (
-                  <div key={item.label} className="flex items-center gap-3">
+                  <Link
+                    key={item.label}
+                    className="flex items-center gap-3 border rounded-lg px-4 py-3 hover:bg-gray-50 cursor-pointer text-gray-800" // Thêm text color để đảm bảo đồng bộ
+                    to={`/${item.label.toLowerCase()}`}
+                    onClick={() => setShowMegaMenu(false)}
+                  >
                     {item.icon}
-                    <span>{item.label}</span>
-                  </div>
+                    <span className="font-medium">{item.label}</span>
+                  </Link>
                 ))}
               </div>
 
               <hr className="my-6" />
 
+              <ul className="space-y-3 text-sm text-gray-700">
+                <li>
+                  <Link
+                    className="flex items-center gap-3 hover:text-blue-600"
+                    to="/ly-tuong-song"
+                    onClick={() => setShowMegaMenu(false)}
+                  >
+                    <LightBulbIcon className="w-5 h-5" /> Lý tưởng sống
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className="flex items-center gap-3 hover:text-blue-600"
+                    to="/noi-thang"
+                    onClick={() => setShowMegaMenu(false)}
+                  >
+                    <MegaphoneIcon className="w-5 h-5" /> Nói thẳng
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className="flex items-center gap-3 hover:text-blue-600"
+                    to="/tin-doc-quyen"
+                    onClick={() => setShowMegaMenu(false)}
+                  >
+                    <StarIcon className="w-5 h-5" /> Tin độc quyền
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className="flex items-center gap-3 hover:text-blue-600"
+                    to="/thi-truong"
+                    onClick={() => setShowMegaMenu(false)}
+                  >
+                    <GlobeAltIcon className="w-5 h-5" /> Thị trường
+                  </Link>
+                </li>
+                <li className="flex items-center gap-3">
+                  <EnvelopeIcon className="w-5 h-5" /> Liên hệ
+                </li>
+                <li className="flex items-center gap-3">
+                  <BuildingOffice2Icon className="w-5 h-5" /> Thông tin tòa soạn
+                </li>
+                <li className="flex items-center gap-3">
+                  <RectangleGroupIcon className="w-5 h-5" /> Liên hệ quảng cáo
+                </li>
+              </ul>
+
+              <hr className="my-6" />
+
               <div className="flex items-center gap-4">
                 <a
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 hover:bg-blue-600 hover:text-white"
                   href="https://www.facebook.com/nguoilaodong"
                   rel="noopener noreferrer"
                   target="_blank"
@@ -320,6 +388,7 @@ const Header = () => {
                   <FaFacebookF />
                 </a>
                 <a
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 hover:bg-red-600 hover:text-white"
                   href="https://www.youtube.com/@nguoilaodong"
                   rel="noopener noreferrer"
                   target="_blank"
@@ -327,13 +396,17 @@ const Header = () => {
                   <FaYoutube />
                 </a>
                 <a
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 hover:bg-blue-500 hover:text-white"
                   href="https://zalo.me"
                   rel="noopener noreferrer"
                   target="_blank"
                 >
                   <SiZalo />
                 </a>
-                <a href="/rss">
+                <a
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 hover:bg-orange-500 hover:text-white"
+                  href="/rss"
+                >
                   <FaRss />
                 </a>
               </div>

@@ -1,5 +1,6 @@
-import { Post } from "@/types";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+
+import { Post } from '@/types';
 
 interface Props {
   post: Post;
@@ -15,23 +16,18 @@ export default function FeaturedBlock({ post }: Props) {
         className="col-span-2 grid grid-cols-2 gap-6 cursor-pointer"
         onClick={() => navigate(`/bai-viet/${post.slug}`)}
       >
-        <img
-          src={post.thumbnail}
-          className="w-full h-[300px] object-cover"
-        />
+        <img className="w-full h-[300px] object-cover" src={post.thumbnail} />
         <div>
-          <h2 className="text-2xl font-bold leading-snug">
-            {post.title}
-          </h2>
-          <p className="text-gray-600 mt-3 line-clamp-4">
-            {post.summary}
-          </p>
+          <h2 className="text-2xl font-bold leading-snug">{post.title}</h2>
+          <p className="text-gray-600 mt-3 line-clamp-4">{post.summary}</p>
         </div>
       </div>
 
       {/* QUẢNG CÁO / SIDEBAR */}
       <div className="bg-blue-600 text-white flex items-center justify-center text-3xl font-bold">
-        CHỈ BẠN<br />CÓ THỂ
+        CHỈ BẠN
+        <br />
+        CÓ THỂ
       </div>
     </div>
   );
