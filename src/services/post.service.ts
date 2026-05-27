@@ -2,9 +2,6 @@ import apiClient from './axios.client';
 
 import { ApiResponse, PageData, Post, PostDetail, PostFilter } from '@/types';
 
-import apiClient from "./axios.client";
-import { ApiResponse, PageData, Post, PostDetail, PostFilter } from "@/types";
-
 export const postService = {
   getPosts: async (
     filter: PostFilter
@@ -17,13 +14,11 @@ export const postService = {
     return response.data;
   },
 
-  getPostDetail: async (
-    slug: string
-  ): Promise<ApiResponse<PostDetail>> => {
+  getPostDetail: async (slug: string): Promise<ApiResponse<PostDetail>> => {
     const response = await apiClient.get<ApiResponse<PostDetail>>(
       `/posts/${slug}`
-
     );
+
     return response.data;
   },
 };

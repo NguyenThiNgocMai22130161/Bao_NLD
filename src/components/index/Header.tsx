@@ -1,51 +1,44 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-} from "@heroui/dropdown";
-import { Avatar, Button } from "@heroui/react";
+} from '@heroui/dropdown';
+import { Avatar, Button } from '@heroui/react';
 import {
   HomeIcon,
   PlayIcon,
   PhotoIcon,
   DocumentTextIcon,
   ChartBarIcon,
-  LightBulbIcon,
-  MegaphoneIcon,
-  StarIcon,
-  GlobeAltIcon,
-  EnvelopeIcon,
-  BuildingOffice2Icon,
-  RectangleGroupIcon,
   MagnifyingGlassIcon,
-} from "@heroicons/react/24/outline";
-import { FaFacebookF, FaYoutube, FaRss } from "react-icons/fa";
-import { SiZalo } from "react-icons/si";
+} from '@heroicons/react/24/outline';
+import { FaFacebookF, FaYoutube, FaRss } from 'react-icons/fa';
+import { SiZalo } from 'react-icons/si';
 
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from '@/contexts/AuthContext';
 
 /* ------------------ utils ------------------ */
 const slugify = (text: string) =>
   text
     .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/\s+/g, "-");
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, '-');
 
 /* ------------------ component ------------------ */
 const Header = () => {
-  const today = new Date().toLocaleDateString("vi-VN", {
-    weekday: "long",
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
+  const today = new Date().toLocaleDateString('vi-VN', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
   });
 
   const [showMegaMenu, setShowMegaMenu] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const { user, isLoggedIn, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -58,54 +51,95 @@ const Header = () => {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") executeSearch();
+    if (e.key === 'Enter') executeSearch();
   };
 
   /* -------- main menu -------- */
   const menuItems = [
-    { label: "THỜI SỰ", slug: "thoi-su" },
-    { label: "QUỐC TẾ", slug: "quoc-te" },
-    { label: "LAO ĐỘNG", slug: "lao-dong" },
-    { label: "BẠN ĐỌC", slug: "ban-doc" },
-    { label: "NET ZERO", slug: "net-zero" },
-    { label: "KINH TẾ", slug: "kinh-te" },
-    { label: "SỨC KHỎE", slug: "suc-khoe" },
-    { label: "GIÁO DỤC", slug: "giao-duc" },
-    { label: "PHÁP LUẬT", slug: "phap-luat" },
-    { label: "VĂN HÓA - VĂN NGHỆ", slug: "van-hoa-van-nghe" },
-    { label: "GIẢI TRÍ", slug: "giai-tri" },
-    { label: "THỂ THAO", slug: "the-thao" },
-    { label: "AI 365", slug: "ai-365" },
-    { label: "PHỤ NỮ", slug: "phu-nu" },
-    { label: "GIA ĐÌNH", slug: "gia-dinh" },
-    { label: "ĐỊA ỐC", slug: "dia-oc" },
+    { label: 'THỜI SỰ', slug: 'thoi-su' },
+    { label: 'QUỐC TẾ', slug: 'quoc-te' },
+    { label: 'LAO ĐỘNG', slug: 'lao-dong' },
+    { label: 'BẠN ĐỌC', slug: 'ban-doc' },
+    { label: 'NET ZERO', slug: 'net-zero' },
+    { label: 'KINH TẾ', slug: 'kinh-te' },
+    { label: 'SỨC KHỎE', slug: 'suc-khoe' },
+    { label: 'GIÁO DỤC', slug: 'giao-duc' },
+    { label: 'PHÁP LUẬT', slug: 'phap-luat' },
+    { label: 'VĂN HÓA - VĂN NGHỆ', slug: 'van-hoa-van-nghe' },
+    { label: 'GIẢI TRÍ', slug: 'giai-tri' },
+    { label: 'THỂ THAO', slug: 'the-thao' },
+    { label: 'AI 365', slug: 'ai-365' },
+    { label: 'PHỤ NỮ', slug: 'phu-nu' },
+    { label: 'GIA ĐÌNH', slug: 'gia-dinh' },
+    { label: 'ĐỊA ỐC', slug: 'dia-oc' },
   ];
 
   /* -------- mega menu -------- */
   const primaryMenus = [
-    { title: "Thời sự", items: ["Chính trị", "Xã hội", "Đô thị"] },
-    { title: "Quốc tế", items: ["Người Việt đó đây", "Hay - lạ", "Vấn đề nóng"] },
-    { title: "Lao động", items: ["Công đoàn - Công nhân", "Việc làm", "An sinh xã hội"] },
-    { title: "Bạn đọc", items: ["Cuộc sống nhân ái", "Tôi lên tiếng", "Góc ảnh bạn đọc"] },
-    { title: "Net Zero", items: ["Tin tức & Xu hướng", "Chuyển đổi xanh", "Sống xanh", "Cẩm nang"] },
-    { title: "Kinh tế", items: ["Kinh doanh", "Tiêu dùng", "Ôtô - Xe - Điện máy", "Bất động sản", "Tài chính-Chứng khoán"] },
-    { title: "Sức khỏe", items: ["Chuyển động y học", "Giới tính", "Bác sĩ của bạn", "Khỏe và đẹp"] },
-    { title: "Giáo dục", items: ["Du học", "Tuyển sinh", "Sau bục giảng"] },
-    { title: "Pháp luật", items: ["Luật sư của bạn", "Truy nã", "Chuyện pháp đình"] },
-    { title: "Văn hóa - Văn nghệ", items: ["Âm nhạc", "Văn học", "Sân khấu", "Điện ảnh"] },
-    { title: "Giải trí", items: ["Hậu trường showbiz", "Chuyện của sao"] },
-    { title: "Thể thao", items: ["Bóng đá", "Golf", "Tennis", "Marathon"] },
-    { title: "AI 365", items: ["Công nghệ số", "Bảo mật", "Mạng xã hội"] },
-    { title: "Phụ nữ", items: ["Khỏe-đẹp", "Tâm sự", "Món ngon", "Video"] },
-    { title: "Gia đình", items: ["Cha mẹ và con cái", "Không gian sống"] },
-    { title: "Địa ốc", items: ["Dự án", "Thị trường", "Nhà đẹp"] },
+    { title: 'Thời sự', items: ['Chính trị', 'Xã hội', 'Đô thị'] },
+    {
+      title: 'Quốc tế',
+      items: ['Người Việt đó đây', 'Hay - lạ', 'Vấn đề nóng'],
+    },
+    {
+      title: 'Lao động',
+      items: ['Công đoàn - Công nhân', 'Việc làm', 'An sinh xã hội'],
+    },
+    {
+      title: 'Bạn đọc',
+      items: ['Cuộc sống nhân ái', 'Tôi lên tiếng', 'Góc ảnh bạn đọc'],
+    },
+    {
+      title: 'Net Zero',
+      items: ['Tin tức & Xu hướng', 'Chuyển đổi xanh', 'Sống xanh', 'Cẩm nang'],
+    },
+    {
+      title: 'Kinh tế',
+      items: [
+        'Kinh doanh',
+        'Tiêu dùng',
+        'Ôtô - Xe - Điện máy',
+        'Bất động sản',
+        'Tài chính-Chứng khoán',
+      ],
+    },
+    {
+      title: 'Sức khỏe',
+      items: [
+        'Chuyển động y học',
+        'Giới tính',
+        'Bác sĩ của bạn',
+        'Khỏe và đẹp',
+      ],
+    },
+    { title: 'Giáo dục', items: ['Du học', 'Tuyển sinh', 'Sau bục giảng'] },
+    {
+      title: 'Pháp luật',
+      items: ['Luật sư của bạn', 'Truy nã', 'Chuyện pháp đình'],
+    },
+    {
+      title: 'Văn hóa - Văn nghệ',
+      items: ['Âm nhạc', 'Văn học', 'Sân khấu', 'Điện ảnh'],
+    },
+    { title: 'Giải trí', items: ['Hậu trường showbiz', 'Chuyện của sao'] },
+    { title: 'Thể thao', items: ['Bóng đá', 'Golf', 'Tennis', 'Marathon'] },
+    { title: 'AI 365', items: ['Công nghệ số', 'Bảo mật', 'Mạng xã hội'] },
+    { title: 'Phụ nữ', items: ['Khỏe-đẹp', 'Tâm sự', 'Món ngon', 'Video'] },
+    { title: 'Gia đình', items: ['Cha mẹ và con cái', 'Không gian sống'] },
+    { title: 'Địa ốc', items: ['Dự án', 'Thị trường', 'Nhà đẹp'] },
   ];
 
   const featureLinks = [
-    { label: "Video", icon: <PlayIcon className="w-5 h-5 text-blue-600" /> },
-    { label: "Photo", icon: <PhotoIcon className="w-5 h-5 text-blue-600" /> },
-    { label: "Longform", icon: <DocumentTextIcon className="w-5 h-5 text-blue-600" /> },
-    { label: "Infographic", icon: <ChartBarIcon className="w-5 h-5 text-blue-600" /> },
+    { label: 'Video', icon: <PlayIcon className="w-5 h-5 text-blue-600" /> },
+    { label: 'Photo', icon: <PhotoIcon className="w-5 h-5 text-blue-600" /> },
+    {
+      label: 'Longform',
+      icon: <DocumentTextIcon className="w-5 h-5 text-blue-600" />,
+    },
+    {
+      label: 'Infographic',
+      icon: <ChartBarIcon className="w-5 h-5 text-blue-600" />,
+    },
   ];
 
   return (
@@ -115,7 +149,10 @@ const Header = () => {
         <div className="bg-white border-b">
           <div className="container mx-auto px-4 py-4 flex items-center justify-between">
             <div className="flex items-center gap-6">
-              <Link to="/" className="text-[#d80f1e] font-black text-4xl uppercase">
+              <Link
+                className="text-[#d80f1e] font-black text-4xl uppercase"
+                to="/"
+              >
                 NGƯỜI LAO ĐỘNG
               </Link>
 
@@ -147,7 +184,12 @@ const Header = () => {
               {isLoggedIn ? (
                 <Dropdown placement="bottom-end">
                   <DropdownTrigger>
-                    <Avatar isBordered as="button" name={user?.username} size="sm" />
+                    <Avatar
+                      isBordered
+                      as="button"
+                      name={user?.username}
+                      size="sm"
+                    />
                   </DropdownTrigger>
                   <DropdownMenu>
                     <DropdownItem
@@ -155,6 +197,12 @@ const Header = () => {
                       onPress={() => navigate('/saved-posts')}
                     >
                       Tủ sách của tôi
+                    </DropdownItem>
+                    <DropdownItem
+                      key="history"
+                      onPress={() => navigate('/history')}
+                    >
+                      Tin đã xem
                     </DropdownItem>
                     <DropdownItem key="logout" color="danger" onPress={logout}>
                       Đăng xuất
@@ -165,7 +213,7 @@ const Header = () => {
                 <Button
                   className="bg-[#004b9a] text-white font-bold"
                   radius="full"
-                  onPress={() => navigate("/auth")}
+                  onPress={() => navigate('/auth')}
                 >
                   Đăng nhập
                 </Button>
@@ -179,7 +227,10 @@ const Header = () => {
           <div className="container mx-auto px-4">
             <ul className="flex items-center whitespace-nowrap overflow-hidden">
               <li>
-                <Link to="/" className="flex items-center px-2 py-2 hover:bg-blue-700">
+                <Link
+                  className="flex items-center px-2 py-2 hover:bg-blue-700"
+                  to="/"
+                >
                   <HomeIcon className="w-6 h-6" />
                 </Link>
               </li>
@@ -187,8 +238,8 @@ const Header = () => {
               {menuItems.map((item) => (
                 <li key={item.slug}>
                   <Link
-                    to={`/${item.slug}`}
                     className="px-2 py-2 text-xs font-semibold uppercase hover:bg-blue-700 block"
+                    to={`/${item.slug}`}
                   >
                     {item.label}
                   </Link>
@@ -215,10 +266,14 @@ const Header = () => {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
               {primaryMenus.map((group) => {
                 const parentSlug = slugify(group.title);
+
                 return (
                   <div key={group.title}>
                     <h4 className="mb-3 font-semibold text-blue-800 uppercase text-sm">
-                      <Link to={`/${parentSlug}`} onClick={() => setShowMegaMenu(false)}>
+                      <Link
+                        to={`/${parentSlug}`}
+                        onClick={() => setShowMegaMenu(false)}
+                      >
                         {group.title}
                       </Link>
                     </h4>
@@ -226,9 +281,9 @@ const Header = () => {
                       {group.items.map((item) => (
                         <li key={item}>
                           <Link
+                            className="text-sm text-gray-700 hover:text-blue-600"
                             to={`/${parentSlug}/${slugify(item)}`}
                             onClick={() => setShowMegaMenu(false)}
-                            className="text-sm text-gray-700 hover:text-blue-600"
                           >
                             {item}
                           </Link>
@@ -257,13 +312,25 @@ const Header = () => {
               <hr className="my-6" />
 
               <div className="flex items-center gap-4">
-                <a href="https://www.facebook.com/nguoilaodong" target="_blank" rel="noopener noreferrer">
+                <a
+                  href="https://www.facebook.com/nguoilaodong"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
                   <FaFacebookF />
                 </a>
-                <a href="https://www.youtube.com/@nguoilaodong" target="_blank" rel="noopener noreferrer">
+                <a
+                  href="https://www.youtube.com/@nguoilaodong"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
                   <FaYoutube />
                 </a>
-                <a href="https://zalo.me" target="_blank" rel="noopener noreferrer">
+                <a
+                  href="https://zalo.me"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
                   <SiZalo />
                 </a>
                 <a href="/rss">

@@ -15,4 +15,9 @@ export const userService = {
 
     return (await res).data;
   },
+  getHistory: async (): Promise<ApiResponse<Post[]>> => {
+    const response = await apiClient.get<ApiResponse<Post[]>>('/users/history');
+
+    return response.data;
+  },
 };
