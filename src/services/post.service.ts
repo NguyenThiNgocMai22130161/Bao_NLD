@@ -1,26 +1,7 @@
-// import apiClient from "./axios.client";
-// import { ApiResponse, PageData, Post, PostDetail, PostFilter } from "@/types";
+import apiClient from './axios.client';
 
-// export const postService = {
-//   getPosts: async (
-//     filter: PostFilter
-//   ): Promise<ApiResponse<PageData<Post>>> => {
-//     const response = await apiClient.post<ApiResponse<PageData<Post>>>(
-//       "/api/posts",
-//       filter
-//     );
-//     return response.data;
-//   },
+import { ApiResponse, PageData, Post, PostDetail, PostFilter } from '@/types';
 
-//   getPostDetail: async (
-//     slug: string
-//   ): Promise<ApiResponse<PostDetail>> => {
-//     const response = await apiClient.get<ApiResponse<PostDetail>>(
-//       `/api/posts/${slug}`
-//     );
-//     return response.data;
-//   },
-// };
 import apiClient from "./axios.client";
 import { ApiResponse, PageData, Post, PostDetail, PostFilter } from "@/types";
 
@@ -29,17 +10,19 @@ export const postService = {
     filter: PostFilter
   ): Promise<ApiResponse<PageData<Post>>> => {
     const response = await apiClient.post<ApiResponse<PageData<Post>>>(
-      "/api/posts",
+      '/posts',
       filter
     );
-    return response.data; // ✅ đúng
+
+    return response.data;
   },
 
   getPostDetail: async (
     slug: string
   ): Promise<ApiResponse<PostDetail>> => {
     const response = await apiClient.get<ApiResponse<PostDetail>>(
-      `/api/posts/${slug}`
+      `/posts/${slug}`
+
     );
     return response.data;
   },
