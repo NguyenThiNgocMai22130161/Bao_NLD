@@ -1,8 +1,16 @@
 import { Routes, Route } from "react-router-dom";
 
+
+import TopBanner from './components/index/TopBanner';
+import Header from './components/index/Header';
+import Footer from './components/index/Footer';
+import AuthPage from './pages/Auth';
+import { AuthProvider } from './contexts/AuthContext';
+import SavedPostsPage from './pages/SavedPostsPage';
 import TopBanner from "./components/index/TopBanner";
 import Header from "./components/index/Header";
 import Footer from "./components/index/Footer";
+
 
 import IndexPage from "@/pages/index";
 import CategoryPage from "@/pages/CategoryPage";
@@ -32,6 +40,7 @@ function App() {
           <Route element={<SearchPage />} path="/search" />
           <Route element={<PostDetailPage />} path="/post/:slug" />
           <Route element={<TagPage />} path="/tag/:slug" />
+          <Route element={<SavedPostsPage />} path="/saved-posts" />
         </Routes>
 
         <Footer />

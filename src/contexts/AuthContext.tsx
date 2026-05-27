@@ -1,6 +1,6 @@
-import { createContext, useState, useEffect, useContext } from "react";
+import { createContext, useState, useContext } from 'react';
 
-import { AuthResponse } from "@/types";
+import { AuthResponse } from '@/types';
 
 export interface UserState {
   username: string;
@@ -16,59 +16,51 @@ export interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const getInitialAuth = (): { user: UserState | null; token: string | null } => {
-  const token = localStorage.getItem("accessToken");
-  const userJson = localStorage.getItem("user");
-  let user: UserState | null = null;
+const getPersistedAuth = () => {
+  const token = localStorage.getItem('accessToken');
+  const userJson = localStorage.getItem('user');
 
   if (token && userJson) {
     try {
-      user = JSON.parse(userJson) as UserState;
-    } catch (e) {
-      console.error("Lỗi khi parse user từ localStorage", e);
-      localStorage.removeItem("user");
-      localStorage.removeItem("accessToken");
+      return {
+        user: JSON.parse(userJson) as UserState,
+        isLoggedIn: true,
+      };
+    } catch (_e) {
+      localStorage.removeItem('user');
+      localStorage.removeItem('accessToken');
     }
   }
 
-  return { user, token };
+  return { user: null, isLoggedIn: false };
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [user, setUser] = useState<UserState | null>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    const { user: initialUser } = getInitialAuth();
-
-    if (initialUser) {
-      setUser(initialUser);
-      setIsLoggedIn(true);
-    }
-  }, []);
+  const [auth, setAuth] = useState(getPersistedAuth());
 
   const setAuthData = (data: AuthResponse) => {
-    localStorage.setItem("accessToken", data.token);
+    localStorage.setItem('accessToken', data.token);
     const userData: UserState = { username: data.username, role: data.role };
 
-    localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem('user', JSON.stringify(userData));
 
-    setUser(userData);
-    setIsLoggedIn(true);
+    setAuth({
+      user: userData,
+      isLoggedIn: true,
+    });
   };
 
   const logout = () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("user");
-    setUser(null);
-    setIsLoggedIn(false);
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('user');
+    setAuth({ user: null, isLoggedIn: false });
   };
 
   const contextValue: AuthContextType = {
-    user,
-    isLoggedIn,
+    user: auth.user,
+    isLoggedIn: auth.isLoggedIn,
     setAuthData,
     logout,
   };
@@ -82,7 +74,7 @@ export const useAuth = () => {
   const context = useContext(AuthContext);
 
   if (context === undefined) {
-    throw new Error("useAuth phải được sử dụng trong AuthProvider");
+    throw new Error('useAuth phải được sử dụng trong AuthProvider');
   }
 
   return context;

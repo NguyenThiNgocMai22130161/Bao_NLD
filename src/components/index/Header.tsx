@@ -150,6 +150,12 @@ const Header = () => {
                     <Avatar isBordered as="button" name={user?.username} size="sm" />
                   </DropdownTrigger>
                   <DropdownMenu>
+                    <DropdownItem
+                      key="saved"
+                      onPress={() => navigate('/saved-posts')}
+                    >
+                      Tủ sách của tôi
+                    </DropdownItem>
                     <DropdownItem key="logout" color="danger" onPress={logout}>
                       Đăng xuất
                     </DropdownItem>
