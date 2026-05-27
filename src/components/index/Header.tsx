@@ -13,6 +13,7 @@ import {
   PhotoIcon,
   DocumentTextIcon,
   ChartBarIcon,
+  MagnifyingGlassIcon,
   LightBulbIcon,
   MegaphoneIcon,
   StarIcon,
@@ -205,6 +206,7 @@ const Header = () => {
                     >
                       Tin đã xem
                     </DropdownItem>
+
                     <DropdownItem
                       key="opinions"
                       onPress={() => navigate('/my-comments')}
@@ -289,6 +291,7 @@ const Header = () => {
                       {group.items.map((item) => (
                         <li key={item}>
                           <Link
+                            className="text-sm text-gray-700 hover:text-blue-600"
                             className="block px-2 py-1 rounded text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600"
                             to={`/${parentSlug}/${slugify(item)}`}
                             onClick={() => setShowMegaMenu(false)}

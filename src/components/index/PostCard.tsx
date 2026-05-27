@@ -1,8 +1,7 @@
+import { Card, CardHeader, CardBody, Image } from '@heroui/react';
+import { useNavigate } from 'react-router-dom';
 
-import { Card, CardHeader, CardBody, Image } from "@heroui/react";
-import { useNavigate } from "react-router-dom";
-
-import { Post } from "@/types";
+import { Post } from '@/types';
 
 interface PostCardProps {
   post: Post;
@@ -12,12 +11,12 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
   const navigate = useNavigate();
 
   const formatDate = (dateString: string) => {
-    if (!dateString) return "";
+    if (!dateString) return '';
 
-    return new Date(dateString).toLocaleDateString("vi-VN", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
+    return new Date(dateString).toLocaleDateString('vi-VN', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
     });
   };
 
@@ -46,7 +45,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
         <Image
           alt={post.title}
           className="object-cover rounded-xl w-full h-[200px]"
-          src={post.thumbnail || "https://placehold.co/300x200"}
+          src={post.thumbnail || 'https://placehold.co/300x200'}
           width={300}
         />
         <p className="mt-2 text-sm text-gray-500 line-clamp-3 text-left">
