@@ -10,8 +10,8 @@ import PostDetailPage from './pages/PostDetailPage';
 import SavedPostsPage from './pages/SavedPostsPage';
 import { CategoryProvider } from './contexts/CategoryContext';
 
-import HistoryPage from '@/pages/HistoryPage'; // Import trang vừa tạo
 import UserCommentsPage from '@/pages/UserCommentsPage';
+import HistoryPage from '@/pages/HistoryPage';
 import TagPage from '@/pages/TagPage';
 import SearchPage from '@/pages/SearchPage';
 import CategoryPage from '@/pages/CategoryPage';
