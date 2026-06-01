@@ -11,27 +11,39 @@ import { SidebarNewsList } from '@/components/index/SidebarNewsList';
 
 const PLACEHOLDER = 'https://via.placeholder.com/600x400?text=No+Image';
 
-// 1. CUSTOM HOOK
 const useNewsData = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    postService
-      .getPosts({ pageNo: 0, pageSize: 100 } as PostFilter)
-      .then((res) => setPosts(res?.data?.items || []))
-      .catch(console.error)
-      .finally(() => setLoading(false));
-  }, []);
+useEffect(() => {
+  postService
+    .getPosts({ pageNo: 0, pageSize: 100 } as PostFilter)
+    .then((res) => {
+      console.log("posts api:", res.data);
 
-  // Data grouping logic
+      const items =
+        (res.data as any)?.items ??
+        (res.data as any)?.data?.items ??
+        (res.data as any)?.data?.content ??
+        [];
+
+      setPosts(items);
+    })
+    .catch((e) => {
+      console.error("getPosts error:", e);
+    })
+    .finally(() => setLoading(false));
+}, []);
+
+
+  
   const data = useMemo(() => {
     if (!posts.length) return {};
 
-    // Tag filtering helper
+    
     const getByTag = (tag: string) =>
       posts.filter((p) => p.tags?.some((t) => t.slug.includes(tag)));
-    // Helper gom category
+    
     const cats: Record<string, Post[]> = {};
 
     posts.forEach((p) => {
@@ -60,7 +72,7 @@ const useNewsData = () => {
   return { posts, loading, ...data };
 };
 
-// 2. SUB-COMPONENTS
+
 const SectionTitle = ({ title, icon: Icon }: { title: string; icon?: any }) => (
   <div className="flex items-center gap-2 mb-6 border-b border-gray-100 pb-2">
     {Icon && <Icon className="text-red-600" size={20} />}
@@ -89,7 +101,7 @@ const SmallPostItem = ({ post }: { post: Post }) => (
   </Link>
 );
 
-// 3. MAIN COMPONENT
+
 export default function IndexPage() {
   const {
     loading,
@@ -113,7 +125,7 @@ export default function IndexPage() {
 
   return (
     <main className="min-h-screen bg-white pb-20">
-      {/* SECTION: TRENDING BAR */}
+      
       <section className="bg-gray-50 py-3 sticky top-0 z-50 backdrop-blur-md bg-opacity-95 border-b border-gray-200">
         <div className="container mx-auto px-4 flex items-center justify-between gap-4 overflow-x-auto">
           <div className="flex items-center gap-2 font-bold text-gray-800 text-sm uppercase shrink-0">
@@ -145,12 +157,11 @@ export default function IndexPage() {
         </div>
       </section>
 
-      {/* SECTION: MAIN CONTENT */}
       <section className="container mx-auto px-4 mt-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-          {/* LEFT COLUMN */}
+         
           <div className="lg:col-span-9">
-            {/* Hero + SubFeatured */}
+           
             <div className="mb-12 border-b border-gray-100 pb-10">
               {hero && <TopStoryCard post={hero} />}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
@@ -174,7 +185,7 @@ export default function IndexPage() {
               </div>
             </div>
 
-            {/* Main Stream List */}
+            
             <SectionTitle title="Tin mới cập nhật" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-12">
               {mainStream
@@ -193,7 +204,7 @@ export default function IndexPage() {
             )}
           </div>
 
-          {/* RIGHT SIDEBAR */}
+          
           <div className="lg:col-span-3 sticky top-20 h-fit">
             {sidebarHot && sidebarHot.length > 0 && (
               <div className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm">
@@ -204,7 +215,7 @@ export default function IndexPage() {
         </div>
       </section>
 
-      {/* SECTION: CATEGORIES */}
+      
       <section className="container mx-auto px-4 py-12 mt-12 bg-gray-50 rounded-xl">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 divide-x divide-gray-200">
           {Object.entries(categories || {}).map(([name, items], idx) => (

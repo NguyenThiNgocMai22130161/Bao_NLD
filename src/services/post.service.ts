@@ -7,7 +7,7 @@ export const postService = {
     filter: PostFilter
   ): Promise<ApiResponse<PageData<Post>>> => {
     const response = await apiClient.post<ApiResponse<PageData<Post>>>(
-      '/posts',
+      '/api/posts',
       filter
     );
 
@@ -16,7 +16,7 @@ export const postService = {
 
   getPostDetail: async (slug: string): Promise<ApiResponse<PostDetail>> => {
     const response = await apiClient.get<ApiResponse<PostDetail>>(
-      `/posts/${slug}`
+      `/api/posts/${slug}`
     );
 
     return response.data;

@@ -27,7 +27,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
       onPress={() => navigate(`/post/${post.slug}`)}
     >
       <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-        {/* LABEL THEO CATEGORY THẬT TỪ BE */}
+        
         <p className="text-tiny uppercase font-bold text-primary">
           {post.category?.name?.toUpperCase()}
         </p>
