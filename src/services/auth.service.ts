@@ -1,20 +1,21 @@
-import apiClient from "./axios.client";
+import apiClient from './axios.client';
 
 import {
   ApiResponse,
   AuthResponse,
+  ChangePasswordRequest,
   ForgotPasswordRequest,
   LoginRequest,
   RegisterRequest,
   ResetPasswordRequest,
   VerifyRequest,
-} from "@/types";
+} from '@/types';
 
 export const authService = {
   login: async (data: LoginRequest): Promise<ApiResponse<AuthResponse>> => {
     const response = await apiClient.post<ApiResponse<AuthResponse>>(
-      "/auth/login",
-      data,
+      '/api/auth/login',
+      data
     );
 
     return response.data;
@@ -22,8 +23,8 @@ export const authService = {
 
   register: async (data: RegisterRequest): Promise<ApiResponse<string>> => {
     const response = await apiClient.post<ApiResponse<string>>(
-      "/auth/register",
-      data,
+      '/api/auth/register',
+      data
     );
 
     return response.data;
@@ -31,30 +32,40 @@ export const authService = {
 
   verify: async (data: VerifyRequest): Promise<ApiResponse<string>> => {
     const response = await apiClient.post<ApiResponse<string>>(
-      "/auth/verify",
-      data,
+      '/api/auth/verify',
+      data
     );
 
     return response.data;
   },
 
   forgotPassword: async (
-    data: ForgotPasswordRequest,
+    data: ForgotPasswordRequest
   ): Promise<ApiResponse<string>> => {
     const response = await apiClient.post<ApiResponse<string>>(
-      "/auth/forgot-password",
-      data,
+      '/api/auth/forgot-password',
+      data
     );
 
     return response.data;
   },
 
   resetPassword: async (
-    data: ResetPasswordRequest,
+    data: ResetPasswordRequest
   ): Promise<ApiResponse<string>> => {
     const response = await apiClient.post<ApiResponse<string>>(
-      "/auth/reset-password",
-      data,
+      '/api/auth/reset-password',
+      data
+    );
+
+    return response.data;
+  },
+  changePassword: async (
+    data: ChangePasswordRequest
+  ): Promise<ApiResponse<string>> => {
+    const response = await apiClient.post<ApiResponse<string>>(
+      '/api/auth/change-password',
+      data
     );
 
     return response.data;

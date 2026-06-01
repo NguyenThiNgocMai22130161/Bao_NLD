@@ -6,7 +6,7 @@ export const commentService = {
   getCommentsByPost: async (postId: string) => {
     // API: GET /api/posts/{postId}/comments
     const response = await apiClient.get<ApiResponse<Comment[]>>(
-      `/posts/${postId}/comments`
+      `/api/posts/${postId}/comments`
     );
 
     return response.data;
@@ -15,7 +15,7 @@ export const commentService = {
   //Login required -> Token required
   createComment: async (postId: string, req: CommentRequest) => {
     const response = await apiClient.post<ApiResponse<Comment>>(
-      `/posts/${postId}/comments`,
+      `/api/posts/${postId}/comments`,
       req
     );
 

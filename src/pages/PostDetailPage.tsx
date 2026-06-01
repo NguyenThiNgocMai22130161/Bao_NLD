@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useReactToPrint } from 'react-to-print';
 import { Spinner } from '@heroui/react';
 import {
   Tag as TagIcon,
   Bookmark,
   BookmarkCheck,
   ArrowLeft,
+  Printer,
 } from 'lucide-react';
 
 import { postService } from '@/services/post.service';
@@ -22,6 +24,13 @@ export default function PostDetailPage() {
   const [post, setPost] = useState<PostDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  const handlePrint = useReactToPrint({
+    contentRef,
+    documentTitle: post?.title || 'bai-viet-chi-tiet',
+  });
 
   const { isLoggedIn } = useAuth();
   const [isSaved, setIsSaved] = useState(false);
@@ -129,31 +138,36 @@ export default function PostDetailPage() {
             </div>
           </div>
 
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-4">
-            {post.title}
-          </h1>
+          {/* Start IN (Gắn ref) */}
+          {/* Wrap Title, Summary, Image, and Content in this div to ensure only this section is captured when printing. */}
+          <div ref={contentRef} className="print-section p-4 md:p-0 bg-white">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-4">
+              {post.title}
+            </h1>
 
-          <p className="font-bold text-gray-700 text-lg mb-6 leading-relaxed">
-            {post.summary}
-          </p>
+            <p className="font-bold text-gray-700 text-lg mb-6 leading-relaxed">
+              {post.summary}
+            </p>
 
-          <figure className="mb-6">
-            <img
-              alt={post.title}
-              className="w-full rounded h-auto object-cover"
-              src={post.thumbnail || 'https://via.placeholder.com/800x400'}
+            <figure className="mb-6">
+              <img
+                alt={post.title}
+                className="w-full rounded h-auto object-cover"
+                src={post.thumbnail || 'https://via.placeholder.com/800x400'}
+              />
+            </figure>
+
+            {/* 2. Content HTML */}
+            <div
+              dangerouslySetInnerHTML={{ __html: post.content || '' }}
+              className="content-body text-lg leading-relaxed space-y-4 text-gray-800"
             />
-          </figure>
 
-          {/* 2. Content HTML */}
-          <div
-            dangerouslySetInnerHTML={{ __html: post.content || '' }}
-            className="content-body text-lg leading-relaxed space-y-4 text-gray-800"
-          />
-
-          <div className="mt-8 text-right font-bold text-gray-900">
-            Theo {post.author || 'Người Lao Động'}
+            <div className="mt-8 text-right font-bold text-gray-900">
+              Theo {post.author || 'Người Lao Động'}
+            </div>
           </div>
+          {/*End IN */}
 
           {/* 3. TAGS */}
           {post.tags && post.tags.length > 0 && (
@@ -170,15 +184,25 @@ export default function PostDetailPage() {
               ))}
             </div>
           )}
-          
-          {/* 4. Back to previous page */}
-          <div className="mt-8 pt-6 mb-8 border-t border-gray-100">
+
+          {/* 4. Action Buttons: */}
+          <div className="mt-8 pt-6 mb-8 border-t border-gray-100 flex flex-wrap gap-4">
+            {/* Back to previous page*/}
             <button
               className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded hover:bg-gray-50 text-gray-700 font-medium transition-colors"
-              onClick={() => navigate(-1)} // -1: go back one page
+              onClick={() => navigate(-1)}
             >
               <ArrowLeft size={18} />
               <span>Quay lại trang trước</span>
+            </button>
+
+            {/* In*/}
+            <button
+              className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded hover:bg-gray-50 text-gray-700 font-medium transition-colors"
+              onClick={() => handlePrint()}
+            >
+              <Printer size={18} />
+              <span>In bài viết</span>
             </button>
           </div>
 

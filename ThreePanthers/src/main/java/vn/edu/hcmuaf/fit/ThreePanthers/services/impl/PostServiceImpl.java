@@ -43,7 +43,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostDetailResponseDto getPostDetail(String slug) {
         PostEntity e = postRepository.findBySlug(slug);
-        if (e == null)
+        if (e == null || e.getContent() == null)
             throw new ResourceNotFoundException("Không tìm thấy bài viết");
 
         //check xem co user dang nhap ko cho phan loging view
@@ -113,7 +113,10 @@ public class PostServiceImpl implements PostService {
 
     private Specification<PostEntity> createSpecification(PostFilter filter) {
         return (root, query, cb) -> {
-            List<Predicate> predicates = new ArrayList<>();
+            List<Predicate> predicates = new ArrayList<>();            
+            // 1. - post content = NULL or ""
+            predicates.add(cb.isNotNull(root.get("content")));
+            predicates.add(cb.notEqual(root.get("content"), ""));                 
 
             if (filter.getCategoriesSlug() != null && !filter.getCategoriesSlug().isEmpty()) {
                 Join<PostEntity, CategoryEntity> categoryJoin = root.join("category");
