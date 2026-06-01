@@ -1,47 +1,63 @@
-import { Routes, Route } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 
+import { HeaderTop, MainNav } from './components/index/Header';
 import TopBanner from './components/index/TopBanner';
-import Header from './components/index/Header';
 import Footer from './components/index/Footer';
+import TopUtilityBar from './components/index/TopUtilityBar';
+
 import AuthPage from './pages/Auth';
-import { AuthProvider } from './contexts/AuthContext';
 import IndexPage from './pages/index';
 import PostDetailPage from './pages/PostDetailPage';
 import SavedPostsPage from './pages/SavedPostsPage';
+import HistoryPage from './pages/HistoryPage';
+import UserCommentsPage from './pages/UserCommentsPage';
+import TagPage from './pages/TagPage';
+import SearchPage from './pages/SearchPage';
+import CategoryPage from './pages/CategoryPage';
+import ProfilePage from './pages/ProfilePage';
+
+import { AuthProvider } from './contexts/AuthContext';
 import { CategoryProvider } from './contexts/CategoryContext';
 
-import UserCommentsPage from '@/pages/UserCommentsPage';
-import HistoryPage from '@/pages/HistoryPage';
-import TagPage from '@/pages/TagPage';
-import SearchPage from '@/pages/SearchPage';
-import CategoryPage from '@/pages/CategoryPage';
+function AppLayout() {
+  const { pathname } = useLocation();
+  const isHome = pathname === '/';
 
-function App() {
+  return (
+    <>
+      {isHome && <TopBanner />}
+      {isHome && <TopUtilityBar />}
+
+      <HeaderTop />
+      <MainNav />
+
+      <Routes>
+        <Route path="/" element={<IndexPage />} />
+        <Route path="/auth" element={<AuthPage />} />
+        <Route path="/search" element={<SearchPage />} />
+        <Route path="/post/:slug" element={<PostDetailPage />} />
+        <Route path="/tag/:slug" element={<TagPage />} />
+
+        <Route path="/saved-posts" element={<SavedPostsPage />} />
+        <Route path="/history" element={<HistoryPage />} />
+        <Route path="/my-comments" element={<UserCommentsPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+
+        <Route path="/:categorySlug" element={<CategoryPage />} />
+        <Route path="/:categorySlug/:childSlug" element={<CategoryPage />} />
+      </Routes>
+
+      <Footer />
+    </>
+  );
+}
+
+export default function App() {
   return (
     <AuthProvider>
       <CategoryProvider>
-        <TopBanner />
-        <Header />
-
-        <Routes>
-          <Route element={<IndexPage />} path="/" />
-          <Route element={<PostDetailPage />} path="/post/:slug" />
-          <Route element={<CategoryPage />} path="/:categorySlug" />
-
-          <Route element={<IndexPage />} path="/" />
-          <Route element={<AuthPage />} path="/auth" />
-          <Route element={<SearchPage />} path="/search" />
-          <Route element={<PostDetailPage />} path="/post/:slug" />
-          <Route element={<TagPage />} path="/tag/:slug" />
-          <Route element={<SavedPostsPage />} path="/saved-posts" />
-          <Route element={<HistoryPage />} path="/history" />
-          <Route element={<UserCommentsPage />} path="/my-comments" />
-        </Routes>
-
-        <Footer />
+        <AppLayout />
       </CategoryProvider>
     </AuthProvider>
   );
 }
-
-export default App;
