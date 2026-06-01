@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Spinner } from '@heroui/react';
-import { Tag as TagIcon, Bookmark, BookmarkCheck } from 'lucide-react';
+import {
+  Tag as TagIcon,
+  Bookmark,
+  BookmarkCheck,
+  ArrowLeft,
+} from 'lucide-react';
 
 import { postService } from '@/services/post.service';
 import { userService } from '@/services/user.service';
@@ -16,6 +21,7 @@ export default function PostDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const [post, setPost] = useState<PostDetail | null>(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const { isLoggedIn } = useAuth();
   const [isSaved, setIsSaved] = useState(false);
@@ -164,7 +170,19 @@ export default function PostDetailPage() {
               ))}
             </div>
           )}
+          
+          {/* 4. Back to previous page */}
+          <div className="mt-8 pt-6 mb-8 border-t border-gray-100">
+            <button
+              className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded hover:bg-gray-50 text-gray-700 font-medium transition-colors"
+              onClick={() => navigate(-1)} // -1: go back one page
+            >
+              <ArrowLeft size={18} />
+              <span>Quay lại trang trước</span>
+            </button>
+          </div>
 
+          {/* 5. Comment Section */}
           <div className="mt-8">
             <CommentSection postId={post.id} />
           </div>
@@ -182,14 +200,14 @@ export default function PostDetailPage() {
               />
             </div>
 
-            {/* List tin liên quan */}
+            {/* List Tin liên quan */}
             {post.relatedPosts && post.relatedPosts.length > 0 && (
               <div className="bg-gray-50 p-4 rounded border border-gray-200">
                 <h3 className="text-lg font-bold text-[#d80f1e] mb-4 border-b border-gray-300 pb-2">
                   TIN LIÊN QUAN
                 </h3>
                 <ul className="space-y-4">
-                  {post.relatedPosts.map((related) => (
+                  {post.relatedPosts.slice(0, 10).map((related) => (
                     <li
                       key={related.id}
                       className="group border-b border-gray-100 last:border-0 pb-2 last:pb-0"
