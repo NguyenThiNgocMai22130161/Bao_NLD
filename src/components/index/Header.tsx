@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Dropdown,
   DropdownItem,
@@ -226,29 +226,6 @@ export const HeaderTop = () => {
 export const MainNav = () => {
   const [showMegaMenu, setShowMegaMenu] = useState(false);
 
-  const location = useLocation();
-  const megaMenuRef = useRef<HTMLDivElement | null>(null);
-
-  // ✅ đổi trang là đóng menu
-  useEffect(() => {
-    setShowMegaMenu(false);
-  }, [location.pathname]);
-
-  // ✅ click ra ngoài là đóng menu
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (!showMegaMenu) return;
-      const target = e.target as Node;
-
-      if (megaMenuRef.current && !megaMenuRef.current.contains(target)) {
-        setShowMegaMenu(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [showMegaMenu]);
-
   return (
     <>
       <div className="bg-[#004b9a] text-white">
@@ -278,8 +255,6 @@ export const MainNav = () => {
               <button
                 className="px-3 py-2 text-xl font-bold hover:bg-blue-700"
                 onClick={() => setShowMegaMenu((v) => !v)}
-                aria-expanded={showMegaMenu}
-                aria-label="Toggle mega menu"
               >
                 …
               </button>
@@ -289,7 +264,7 @@ export const MainNav = () => {
       </div>
 
       {showMegaMenu && (
-        <div ref={megaMenuRef} className="bg-white border-b shadow-sm">
+        <div className="bg-white border-b shadow-sm">
           <div className="container mx-auto px-6 py-6 grid grid-cols-1 md:grid-cols-[1fr_320px] gap-8">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
               {primaryMenus.map((group) => {
@@ -305,7 +280,6 @@ export const MainNav = () => {
                         {group.title}
                       </Link>
                     </h4>
-
                     <ul className="space-y-2">
                       {group.items.map((item) => (
                         <li key={item}>
@@ -404,7 +378,6 @@ export const MainNav = () => {
                 >
                   <FaFacebookF />
                 </a>
-
                 <a
                   className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 hover:bg-red-600 hover:text-white"
                   href="https://www.youtube.com/@nguoilaodong"
@@ -413,7 +386,6 @@ export const MainNav = () => {
                 >
                   <FaYoutube />
                 </a>
-
                 <a
                   className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 hover:bg-blue-500 hover:text-white"
                   href="https://zalo.me"
@@ -422,13 +394,9 @@ export const MainNav = () => {
                 >
                   <SiZalo />
                 </a>
-
                 <a
-                 
                   className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 hover:bg-orange-500 hover:text-white"
-                 
                   href="/rss"
-                
                 >
                   <FaRss />
                 </a>
