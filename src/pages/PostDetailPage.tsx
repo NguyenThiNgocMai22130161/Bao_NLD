@@ -170,6 +170,7 @@ export default function PostDetailPage() {
               ))}
             </div>
           )}
+          
           {/* 4. Back to previous page */}
           <div className="mt-8 pt-6 mb-8 border-t border-gray-100">
             <button
