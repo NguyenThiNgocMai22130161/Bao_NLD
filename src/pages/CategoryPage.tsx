@@ -4,7 +4,8 @@ import { Spinner } from "@heroui/react";
 import { Clock } from "lucide-react";
 
 import { postService } from "@/services/post.service";
-import { Post, PostFilter, PostType } from "@/types";
+import { categoryService } from "@/services/category.service";
+import { Category, Post, PostFilter, PostType } from "@/types";
 import { useCategories } from "@/contexts/CategoryContext";
 
 import Pagination from "@/components/common/Pagination";
@@ -38,6 +39,7 @@ export default function CategoryPage() {
   const [totalPages, setTotalPages] = useState(0);
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
+  const [categoryDetail, setCategoryDetail] = useState<Category | null>(null);
 
   const category = useMemo(() => {
     if (!effectiveSlug) return undefined;
@@ -46,18 +48,31 @@ export default function CategoryPage() {
 
   const pageTitle = useMemo(() => {
     if (routeType) return categorySlug?.toUpperCase();
+    if (categoryDetail?.name) return categoryDetail.name;
     if (category?.name) return category.name;
     return "TIN TỨC";
-  }, [routeType, categorySlug, category]);
+  }, [routeType, categorySlug, categoryDetail, category]);
 
   useEffect(() => {
     setPage(1);
   }, [categorySlug, childSlug, routeType]);
 
   useEffect(() => {
-    const fetchPosts = async () => {
+    const fetchPageData = async () => {
       try {
         setLoading(true);
+
+        if (!routeType && effectiveSlug) {
+          const detailRes = await categoryService.getDetail(effectiveSlug, page, 10);
+          const detailData = detailRes.data.data;
+
+          setCategoryDetail(detailData?.category ?? null);
+          setPosts(detailData?.posts?.items ?? []);
+          setTotalPages(detailData?.posts?.totalPages ?? 0);
+          return;
+        }
+
+        setCategoryDetail(null);
 
         const filter: PostFilter = {
           pageNo: Math.max(page - 1, 0),
@@ -83,12 +98,19 @@ export default function CategoryPage() {
       }
     };
 
-    if (!routeType && effectiveSlug && categoriesLoading) return;
+    if (!routeType && !effectiveSlug) {
+      setLoading(false);
+      setPosts([]);
+      setTotalPages(0);
+      return;
+    }
 
-    fetchPosts();
+    if (routeType && categoriesLoading) return;
+
+    fetchPageData();
   }, [effectiveSlug, routeType, page, categoriesLoading]);
 
-  if (!routeType && effectiveSlug && !categoriesLoading && !category) {
+  if (!routeType && effectiveSlug && !loading && !categoryDetail) {
     return (
       <div className="text-center mt-20 text-gray-500">
         Không tìm thấy chuyên mục
@@ -110,6 +132,14 @@ export default function CategoryPage() {
     <section className="container mx-auto px-4 py-8 max-w-7xl">
       <div className="border-b pb-4 mb-8">
         <h1 className="text-4xl font-bold uppercase">{pageTitle}</h1>
+        {!routeType && categoryDetail && (
+          <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-gray-500">
+            <span>Slug: {categoryDetail.slug}</span>
+            {categoryDetail.children?.length ? (
+              <span>{categoryDetail.children.length} chuyên mục con</span>
+            ) : null}
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">

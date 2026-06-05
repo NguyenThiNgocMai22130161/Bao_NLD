@@ -3,9 +3,15 @@ spring:
     name: three-panthers
   
   datasource:
-    url: jdbc:postgresql://45.77.36.194:5432/laptrinhfe
-    username: betodemy
-    password: Betodemy2025
+    url: jdbc:postgresql://ep-quiet-sun-ao6do42h-pooler.c-2.ap-southeast-1.aws.neon.tech:5432/neondb?sslmode=require
+    username: neondb_owner
+    password: npg_Bsp5fXYyNx2t
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      connection-timeout: 60000
+      max-lifetime: 180000
+      keepalive-time: 60000
+
 
   jpa:
     hibernate:

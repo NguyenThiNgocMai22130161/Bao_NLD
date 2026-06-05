@@ -7,5 +7,5 @@ import vn.edu.hcmuaf.fit.ThreePanthers.entities.CategoryEntity;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<CategoryEntity, String>{
-    
+	CategoryEntity findBySlug(String slug);
 }

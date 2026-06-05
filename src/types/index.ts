@@ -93,6 +93,11 @@ export interface PageData<T> {
   items: T[];
 }
 
+export interface CategoryDetailData {
+  category: Category;
+  posts: PageData<Post>;
+}
+
 export interface LoginRequest {
   identifier: string;
   password: string;

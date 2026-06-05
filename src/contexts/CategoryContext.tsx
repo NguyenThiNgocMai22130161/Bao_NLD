@@ -1,6 +1,12 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { Category } from "@/types";
-import { categoryService } from "@/services/category.service";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import { Category } from '@/types';
+import { categoryService } from '@/services/category.service';
 
 type CategoryContextValue = {
   categories: Category[];
@@ -28,7 +34,11 @@ const flattenCategories = (cats: Category[]) => {
   return res;
 };
 
-export const CategoryProvider = ({ children }: { children: React.ReactNode }) => {
+export const CategoryProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -36,9 +46,22 @@ export const CategoryProvider = ({ children }: { children: React.ReactNode }) =>
     try {
       setLoading(true);
       const res = await categoryService.getAll();
-      setCategories(res.data.data ?? []);
+      // setCategories(res.data.data ?? []);
+      // Kiểm tra xem res.data (là ApiListResponse) có chứa mảng data không
+    // Nếu trong API của bạn, mảng danh mục nằm trong thuộc tính 'data'
+    // thì bạn phải set nó vào state:
+    
+    if (res.data && Array.isArray(res.data.data)) {
+        setCategories(res.data.data);
+    } else if (Array.isArray(res.data)) {
+        // Hoặc nếu res.data là mảng luôn
+        setCategories(res.data);
+    } else {
+        setCategories([]);
+    }
+
     } catch (e) {
-      console.error("Load categories error:", e);
+      console.error('Load categories error:', e);
       setCategories([]);
     } finally {
       setLoading(false);
@@ -49,10 +72,15 @@ export const CategoryProvider = ({ children }: { children: React.ReactNode }) =>
     refresh();
   }, []);
 
-  const flatCategories = useMemo(() => flattenCategories(categories), [categories]);
+  const flatCategories = useMemo(
+    () => flattenCategories(categories),
+    [categories]
+  );
 
   return (
-    <CategoryContext.Provider value={{ categories, flatCategories, loading, refresh }}>
+    <CategoryContext.Provider
+      value={{ categories, flatCategories, loading, refresh }}
+    >
       {children}
     </CategoryContext.Provider>
   );

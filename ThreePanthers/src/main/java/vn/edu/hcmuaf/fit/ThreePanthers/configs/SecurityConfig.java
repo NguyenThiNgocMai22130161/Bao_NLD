@@ -37,10 +37,13 @@ public class SecurityConfig {
             .authenticationEntryPoint(jwtAuthenticationEntryPoint)
             .accessDeniedHandler(jwtAccessDeniedHandler))
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/api/auth/register", "/api/auth/login", "/api/auth/verify").permitAll()
-            .requestMatchers("/api/auth/forgot-password", "/api/auth/reset-password").permitAll()
-            .requestMatchers("/api/posts/**", "/api/categories/**").permitAll()
-            .anyRequest().authenticated())
+        .requestMatchers("/api/auth/register", "/api/auth/login",
+        "/api/auth/verify").permitAll()
+        .requestMatchers("/api/auth/forgot-password",
+        "/api/auth/reset-password").permitAll()
+        .requestMatchers("/api/posts/**", "/api/categories/**").permitAll()
+        .anyRequest().authenticated())
+        
         .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authenticationProvider(authenticationProvider)
         .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
@@ -48,12 +51,30 @@ public class SecurityConfig {
     return http.build();
   }
 
+  // @Bean
+  // public CorsConfigurationSource corsConfigurationSource() {
+  // CorsConfiguration configuration = new CorsConfiguration();
+  // configuration.setAllowedOrigins(List.of("http://localhost:5173"));
+  // configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE",
+  // "OPTIONS"));
+  // configuration.setAllowedHeaders(Arrays.asList("Authorization",
+  // "Content-Type", "x-auth-token"));
+  // configuration.setAllowCredentials(true);
+  // UrlBasedCorsConfigurationSource source = new
+  // UrlBasedCorsConfigurationSource();
+  // source.registerCorsConfiguration("/**", configuration);
+  // return source;
+  // }
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOrigins(List.of("http://localhost:5173"));
+    // 1. Cho phép cả 2 port 5173 và 5174 của Vite để đề phòng nó tự nhảy port nha
+    // Han
+    configuration.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:5174"));
     configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-    configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "x-auth-token"));
+    // 2. Thay vì giới hạn, mở rộng cho phép nhận TẤT CẢ các loại Headers từ
+    // Frontend gửi sang
+    configuration.setAllowedHeaders(List.of("*"));
     configuration.setAllowCredentials(true);
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", configuration);

@@ -80,8 +80,11 @@ public class PostServiceImpl implements PostService {
                 e.getId()   
             );
 
-            List<PostSummaryResponseDto> relatedDtos = relatedEntities.stream()
+                List<PostSummaryResponseDto> relatedDtos = relatedEntities.stream()
                     .map(this::mapToSummaryDto)
+                    .filter(dto -> dto.getTitle() != null && !dto.getTitle().trim().isEmpty()
+                        && dto.getSummary() != null && !dto.getSummary().trim().isEmpty()
+                        && dto.getThumbnail() != null && !dto.getThumbnail().trim().isEmpty())
                     .collect(Collectors.toList());
             
             res.setRelatedPosts(relatedDtos);
@@ -114,9 +117,13 @@ public class PostServiceImpl implements PostService {
     private Specification<PostEntity> createSpecification(PostFilter filter) {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();            
-            // 1. - post content = NULL or ""
+            // 1. - post content, title, summary should not be NULL or empty
             predicates.add(cb.isNotNull(root.get("content")));
-            predicates.add(cb.notEqual(root.get("content"), ""));                 
+            predicates.add(cb.notEqual(root.get("content"), ""));
+            predicates.add(cb.isNotNull(root.get("title")));
+            predicates.add(cb.notEqual(root.get("title"), ""));
+            predicates.add(cb.isNotNull(root.get("summary")));
+            predicates.add(cb.notEqual(root.get("summary"), ""));                 
 
             if (filter.getCategoriesSlug() != null && !filter.getCategoriesSlug().isEmpty()) {
                 Join<PostEntity, CategoryEntity> categoryJoin = root.join("category");

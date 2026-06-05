@@ -33,7 +33,7 @@ public interface PostRepository extends JpaRepository<PostEntity, String>, JpaSp
     //     String id
     // );
 
-    @Query("SELECT p FROM PostEntity p WHERE p.category = ?1 AND p.status = ?2 AND p.id <> ?3 AND p.content IS NOT NULL ORDER BY p.publishedAt DESC")
+    @Query("SELECT p FROM PostEntity p WHERE p.category = ?1 AND p.status = ?2 AND p.id <> ?3 AND p.content IS NOT NULL AND p.title IS NOT NULL AND p.title <> '' AND p.summary IS NOT NULL AND p.summary <> '' AND p.thumbnail IS NOT NULL AND p.thumbnail <> ''ORDER BY p.publishedAt DESC")
     List<PostEntity> findTop5ByCategoryAndStatusAndIdNotOrderByPublishedAtDesc(
         CategoryEntity category, PostStatus status, String id);
 }

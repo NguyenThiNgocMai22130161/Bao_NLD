@@ -47,11 +47,11 @@ useEffect(() => {
     const cats: Record<string, Post[]> = {};
 
     posts.forEach((p) => {
-      const cName = p.category?.name;
+      const cSlug = p.category?.slug;
 
-      if (cName) {
-        if (!cats[cName]) cats[cName] = [];
-        if (cats[cName].length < 4) cats[cName].push(p);
+      if (cSlug) {
+        if (!cats[cSlug]) cats[cSlug] = [];
+        if (cats[cSlug].length < 4) cats[cSlug].push(p);
       }
     });
 
@@ -73,7 +73,7 @@ useEffect(() => {
 };
 
 
-const SectionTitle = ({ title, icon: Icon }: { title: string; icon?: any }) => (
+const SectionTitle = ({ title, icon: Icon, to }: { title: string; icon?: any; to?: string }) => (
   <div className="flex items-center gap-2 mb-6 border-b border-gray-100 pb-2">
     {Icon && <Icon className="text-red-600" size={20} />}
     <span className="w-1.5 h-6 bg-red-600 rounded-sm block md:hidden" />
@@ -82,7 +82,7 @@ const SectionTitle = ({ title, icon: Icon }: { title: string; icon?: any }) => (
     </h2>
     <Link
       className="text-xs text-gray-500 hover:text-red-600 flex items-center"
-      to="#"
+      to={to ?? '#'}
     >
       Xem thêm <ChevronRight size={14} />
     </Link>
@@ -218,9 +218,9 @@ export default function IndexPage() {
       
       <section className="container mx-auto px-4 py-12 mt-12 bg-gray-50 rounded-xl">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 divide-x divide-gray-200">
-          {Object.entries(categories || {}).map(([name, items], idx) => (
-            <div key={name} className={idx > 0 ? 'pl-10' : ''}>
-              <SectionTitle title={name} />
+          {Object.entries(categories || {}).map(([slug, items], idx) => (
+            <div key={slug} className={idx > 0 ? 'pl-10' : ''}>
+              <SectionTitle title={items[0]?.category?.name ?? slug} to={`/${slug}`} />
               {items[0] && (
                 <Link
                   className="block group mb-4"
