@@ -16,7 +16,6 @@ export default function SearchPage() {
   // 2. State management for posts, loading status, and total count
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(false);
-  const [total, setTotal] = useState(0);
 
   // 3. Fetch search results whenever the query changes
   useEffect(() => {
@@ -37,10 +36,8 @@ export default function SearchPage() {
         // Update state with fetched data
         if (response?.data?.items) {
           setPosts(response.data.items);
-          setTotal(response.data.totalElements || 0);
         } else {
           setPosts([]);
-          setTotal(0);
         }
       } catch (error) {
         console.error('Error fetching search results:', error);

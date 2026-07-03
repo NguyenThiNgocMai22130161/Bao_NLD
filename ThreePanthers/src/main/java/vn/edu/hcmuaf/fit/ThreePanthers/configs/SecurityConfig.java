@@ -1,13 +1,12 @@
 package vn.edu.hcmuaf.fit.ThreePanthers.configs;
 
-import lombok.RequiredArgsConstructor;
-
 import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -18,8 +17,11 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import lombok.RequiredArgsConstructor;
+
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true) // Enable @PreAuthorize
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -42,6 +44,7 @@ public class SecurityConfig {
         .requestMatchers("/api/auth/forgot-password",
         "/api/auth/reset-password").permitAll()
         .requestMatchers("/api/posts/**", "/api/categories/**").permitAll()
+        .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
         .anyRequest().authenticated())
         
         .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -71,7 +74,7 @@ public class SecurityConfig {
     // 1. Cho phép cả 2 port 5173 và 5174 của Vite để đề phòng nó tự nhảy port nha
     // Han
     configuration.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:5174"));
-    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
     // 2. Thay vì giới hạn, mở rộng cho phép nhận TẤT CẢ các loại Headers từ
     // Frontend gửi sang
     configuration.setAllowedHeaders(List.of("*"));

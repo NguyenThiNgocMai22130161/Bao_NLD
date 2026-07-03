@@ -1,5 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { Post } from '@/types';
 
@@ -12,8 +11,6 @@ export const SidebarNewsList: React.FC<SidebarNewsListProps> = ({
   title,
   posts,
 }) => {
-  const navigate = useNavigate();
-
   return (
     <div className="mb-8">
       <h3 className="text-lg font-bold uppercase mb-4 flex items-center">

@@ -10,6 +10,12 @@ import { useAuth } from "@/contexts/AuthContext";
 interface LoginFormProps {
   onForgotPassword: () => void;
 }
+
+interface ValidationErrors {
+  identifier?: string;
+  password?: string;
+}
+
 export const LoginForm: React.FC<LoginFormProps> = ({ onForgotPassword }) => {
   const { setAuthData } = useAuth();
   const navigate = useNavigate();
@@ -20,28 +26,59 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onForgotPassword }) => {
   });
   const [isVisible, setIsVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState<ValidationErrors>({});
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
+  // Client-side validation
+  const validateForm = (): boolean => {
+    const newErrors: ValidationErrors = {};
+
+    if (!loginData.identifier.trim()) {
+      newErrors.identifier = "Email hoặc tên đăng nhập không được để trống";
+    }
+
+    if (!loginData.password) {
+      newErrors.password = "Mật khẩu không được để trống";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Client-side validation
+    if (!validateForm()) {
+      return;
+    }
+
     setIsLoading(true);
+    setErrors({});
+    
     try {
       const res = await authService.login(loginData);
 
       setAuthData(res.data);
       alert("Đăng nhập thành công!");
-      navigate("/");
+      navigate(res.data.role === 'ADMIN' ? '/admin' : '/');
     } catch (error: any) {
       console.error(error);
-      alert(error.message || "Đăng nhập thất bại.");
+      
+      // Xử lý validation errors từ backend
+      if (error.response?.data?.details) {
+        setErrors(error.response.data.details);
+      } else {
+        alert(error.response?.data?.message || error.message || "Đăng nhập thất bại.");
+      }
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <form className="flex flex-col gap-4 mt-4" onSubmit={handleLogin}>
+    <form className="flex flex-col gap-4 mt-4" noValidate onSubmit={handleLogin}>
       <div className="flex flex-col gap-2 mb-2">
         <h1 className="text-xl font-bold text-[#004b9a] uppercase text-center">
           Chào mừng trở lại
@@ -59,14 +96,20 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onForgotPassword }) => {
         endContent={
           <EnvelopeIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
         }
+        errorMessage={errors.identifier}
+        isInvalid={!!errors.identifier}
         label="Email hoặc Tên đăng nhập"
         placeholder="Nhập email/username"
         type="text"
         value={loginData.identifier}
         variant="bordered"
-        onChange={(e) =>
-          setLoginData({ ...loginData, identifier: e.target.value })
-        }
+        onChange={(e) => {
+          setLoginData({ ...loginData, identifier: e.target.value });
+          // Clear error khi user bắt đầu nhập
+          if (errors.identifier) {
+            setErrors({ ...errors, identifier: undefined });
+          }
+        }}
       />
       <Input
         isRequired
@@ -86,14 +129,20 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onForgotPassword }) => {
             )}
           </button>
         }
+        errorMessage={errors.password}
+        isInvalid={!!errors.password}
         label="Mật khẩu"
         placeholder="Nhập mật khẩu"
         type={isVisible ? "text" : "password"}
         value={loginData.password}
         variant="bordered"
-        onChange={(e) =>
-          setLoginData({ ...loginData, password: e.target.value })
-        }
+        onChange={(e) => {
+          setLoginData({ ...loginData, password: e.target.value });
+          // Clear error khi user bắt đầu nhập
+          if (errors.password) {
+            setErrors({ ...errors, password: undefined });
+          }
+        }}
       />
       <div className="flex justify-center px-1">
         <Link

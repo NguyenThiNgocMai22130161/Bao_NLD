@@ -13,36 +13,70 @@ const PLACEHOLDER = 'https://via.placeholder.com/600x400?text=No+Image';
 
 const useNewsData = () => {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [featuredPosts, setFeaturedPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
 
-useEffect(() => {
-  postService
-    .getPosts({ pageNo: 0, pageSize: 100 } as PostFilter)
-    .then((res) => {
-      console.log("posts api:", res.data);
+  useEffect(() => {
+    // Lấy tất cả bài viết
+    const fetchAllPosts = postService
+      .getPosts({ pageNo: 0, pageSize: 100 } as PostFilter)
+      .then((res) => {
+        console.log("all posts api:", res.data);
 
-      const items =
-        (res.data as any)?.items ??
-        (res.data as any)?.data?.items ??
-        (res.data as any)?.data?.content ??
-        [];
+        const items =
+          (res.data as any)?.items ??
+          (res.data as any)?.data?.items ??
+          (res.data as any)?.data?.content ??
+          [];
 
-      setPosts(items);
-    })
-    .catch((e) => {
-      console.error("getPosts error:", e);
-    })
-    .finally(() => setLoading(false));
-}, []);
+        setPosts(items);
+        return items;
+      });
+
+    // Lấy bài viết featured
+    const fetchFeaturedPosts = postService
+      .getPosts({ pageNo: 0, pageSize: 4, isFeatured: true } as PostFilter)
+      .then((res) => {
+        console.log("featured posts api:", res.data);
+
+        const items =
+          (res.data as any)?.items ??
+          (res.data as any)?.data?.items ??
+          (res.data as any)?.data?.content ??
+          [];
+
+        setFeaturedPosts(items);
+        return items;
+      });
+
+    // Chờ cả 2 API call hoàn thành
+    Promise.all([fetchAllPosts, fetchFeaturedPosts])
+      .catch((e) => {
+        console.error("getPosts error:", e);
+      })
+      .finally(() => setLoading(false));
+  }, []);
 
 
   
   const data = useMemo(() => {
     if (!posts.length) return {};
 
-    
-    const getByTag = (tag: string) =>
-      posts.filter((p) => p.tags?.some((t) => t.slug.includes(tag)));
+    // Lấy bài viết theo tag từ featuredPosts (ưu tiên) hoặc posts
+    const getByTag = (tag: string) => {
+      // Tìm trong featured posts trước
+      const featuredWithTag = featuredPosts.filter((p) => 
+        p.tags?.some((t) => t.slug.includes(tag))
+      );
+      
+      // Nếu có featured posts với tag này, trả về
+      if (featuredWithTag.length > 0) {
+        return featuredWithTag;
+      }
+      
+      // Nếu không, tìm trong tất cả posts
+      return posts.filter((p) => p.tags?.some((t) => t.slug.includes(tag)));
+    };
     
     const cats: Record<string, Post[]> = {};
 
@@ -55,9 +89,15 @@ useEffect(() => {
       }
     });
 
+    // Sử dụng featuredPosts nếu có, nếu không thì dùng posts đầu tiên
+    const heroPost = featuredPosts[0] ?? posts[0];
+    const subFeaturedPosts = featuredPosts.length >= 4 
+      ? featuredPosts.slice(1, 4) 
+      : posts.slice(1, 4);
+
     return {
-      hero: posts[0],
-      subFeatured: posts.slice(1, 4),
+      hero: heroPost,
+      subFeatured: subFeaturedPosts,
       sidebarHot: posts.slice(4, 9),
       mainStream: posts.slice(9),
       trending: {
@@ -67,7 +107,7 @@ useEffect(() => {
       },
       categories: cats,
     };
-  }, [posts]);
+  }, [posts, featuredPosts]);
 
   return { posts, loading, ...data };
 };

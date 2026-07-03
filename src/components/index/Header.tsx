@@ -202,6 +202,11 @@ export const HeaderTop = () => {
                   >
                     Ý kiến của bạn
                   </DropdownItem>
+                  {user?.role === 'ADMIN' ? (
+                    <DropdownItem key="admin" onPress={() => navigate('/admin')}>
+                      Quản trị hệ thống
+                    </DropdownItem>
+                  ) : null}
                   <DropdownItem key="logout" color="danger" onPress={logout}>
                     Đăng xuất
                   </DropdownItem>

@@ -216,13 +216,13 @@ export default function PostDetailPage() {
         <div className="lg:col-span-1">
           <div className="mb-8 sticky top-4">
             {/* Banner QC */}
-            <div className="mb-8">
+            {/* <div className="mb-8">
               <img
                 alt="QC"
                 className="w-full mx-auto rounded"
                 src="https://adi.admicro.vn/adt/wd/2023/10/banner-300x600.jpg"
               />
-            </div>
+            </div> */}
 
             {/* List Tin liên quan */}
             {post.relatedPosts && post.relatedPosts.length > 0 && (

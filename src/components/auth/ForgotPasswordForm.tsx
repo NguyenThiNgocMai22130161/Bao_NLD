@@ -9,12 +9,20 @@ interface ForgotPasswordFormProps {
   onBack: () => void;
 }
 
+interface ValidationErrors {
+  email?: string;
+  otp?: string;
+  newPassword?: string;
+  confirmPassword?: string;
+}
+
 export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
   onBack,
 }) => {
   const [step, setStep] = useState<1 | 2>(1);
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
+  const [errors, setErrors] = useState<ValidationErrors>({});
 
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -23,14 +31,60 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
+  // Validation helper
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  // Validate step 1
+  const validateStep1 = (): boolean => {
+    const newErrors: ValidationErrors = {};
+
+    if (!email.trim()) {
+      newErrors.email = "Email không được để trống";
+    } else if (!validateEmail(email)) {
+      newErrors.email = "Email không hợp lệ";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // Validate step 2
+  const validateStep2 = (): boolean => {
+    const newErrors: ValidationErrors = {};
+
+    if (!otp.trim()) {
+      newErrors.otp = "Mã OTP không được để trống";
+    }
+
+    if (!newPassword) {
+      newErrors.newPassword = "Mật khẩu mới không được để trống";
+    } else if (newPassword.length < 6) {
+      newErrors.newPassword = "Mật khẩu phải có ít nhất 6 ký tự";
+    }
+
+    if (!confirmPassword) {
+      newErrors.confirmPassword = "Vui lòng xác nhận mật khẩu";
+    } else if (newPassword !== confirmPassword) {
+      newErrors.confirmPassword = "Mật khẩu xác nhận không khớp";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) {
-      alert("Vui lòng nhập email");
-
+    
+    if (!validateStep1()) {
       return;
     }
+
     setIsLoading(true);
+    setErrors({});
+    
     try {
       const req: ForgotPasswordRequest = { email };
 
@@ -39,7 +93,12 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
       setStep(2);
     } catch (error: any) {
       console.error(error);
-      alert(error.message || "Không tìm thấy email trong hệ thống.");
+      
+      if (error.response?.data?.details) {
+        setErrors(error.response.data.details);
+      } else {
+        alert(error.response?.data?.message || error.message || "Không tìm thấy email trong hệ thống.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -47,12 +106,14 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
 
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (newPassword !== confirmPassword) {
-      alert("Mật khẩu xác nhận không khớp!");
-
+    
+    if (!validateStep2()) {
       return;
     }
+
     setIsLoading(true);
+    setErrors({});
+    
     try {
       const req: ResetPasswordRequest = {
         email,
@@ -68,7 +129,12 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
       onBack();
     } catch (error: any) {
       console.error(error);
-      alert(error.message || "Đổi mật khẩu thất bại. Kiểm tra lại mã OTP.");
+      
+      if (error.response?.data?.details) {
+        setErrors(error.response.data.details);
+      } else {
+        alert(error.response?.data?.message || error.message || "Đổi mật khẩu thất bại. Kiểm tra lại mã OTP.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -76,7 +142,7 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
 
   if (step === 1) {
     return (
-      <form className="flex flex-col gap-4 mt-4" onSubmit={handleSendOtp}>
+      <form className="flex flex-col gap-4 mt-4" noValidate onSubmit={handleSendOtp}>
         <div className="flex flex-col gap-2 mb-2">
           <h1 className="text-xl font-bold text-[#004b9a] uppercase text-center">
             Quên mật khẩu
@@ -94,12 +160,19 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
           endContent={
             <EnvelopeIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
           }
+          errorMessage={errors.email}
+          isInvalid={!!errors.email}
           label="Email"
           placeholder="Nhập email đã đăng ký"
           type="email"
           value={email}
           variant="bordered"
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            if (errors.email) {
+              setErrors({ ...errors, email: undefined });
+            }
+          }}
         />
 
         <div className="flex flex-col gap-3 justify-end mt-4">
@@ -120,7 +193,7 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
   }
 
   return (
-    <form className="flex flex-col gap-4 mt-4" onSubmit={handleResetPassword}>
+    <form className="flex flex-col gap-4 mt-4" noValidate onSubmit={handleResetPassword}>
       <div className="flex flex-col gap-2 mb-2">
         <h1 className="text-xl font-bold text-[#004b9a] uppercase text-center">
           Đặt lại mật khẩu
@@ -135,11 +208,18 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
         classNames={{
           inputWrapper: "group-data-[focus=true]:border-[#004b9a]",
         }}
+        errorMessage={errors.otp}
+        isInvalid={!!errors.otp}
         label="Mã xác thực (OTP)"
         placeholder="Nhập 6 số"
         value={otp}
         variant="bordered"
-        onChange={(e) => setOtp(e.target.value)}
+        onChange={(e) => {
+          setOtp(e.target.value);
+          if (errors.otp) {
+            setErrors({ ...errors, otp: undefined });
+          }
+        }}
       />
 
       <Input
@@ -160,12 +240,19 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
             )}
           </button>
         }
+        errorMessage={errors.newPassword}
+        isInvalid={!!errors.newPassword}
         label="Mật khẩu mới"
-        placeholder="Nhập mật khẩu mới"
+        placeholder="Nhập mật khẩu mới (ít nhất 6 ký tự)"
         type={isVisible ? "text" : "password"}
         value={newPassword}
         variant="bordered"
-        onChange={(e) => setNewPassword(e.target.value)}
+        onChange={(e) => {
+          setNewPassword(e.target.value);
+          if (errors.newPassword) {
+            setErrors({ ...errors, newPassword: undefined });
+          }
+        }}
       />
 
       <Input
@@ -173,12 +260,19 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
         classNames={{
           inputWrapper: "group-data-[focus=true]:border-[#004b9a]",
         }}
+        errorMessage={errors.confirmPassword}
+        isInvalid={!!errors.confirmPassword}
         label="Xác nhận mật khẩu"
         placeholder="Nhập lại mật khẩu mới"
         type={isVisible ? "text" : "password"}
         value={confirmPassword}
         variant="bordered"
-        onChange={(e) => setConfirmPassword(e.target.value)}
+        onChange={(e) => {
+          setConfirmPassword(e.target.value);
+          if (errors.confirmPassword) {
+            setErrors({ ...errors, confirmPassword: undefined });
+          }
+        }}
       />
 
       <div className="flex flex-col gap-3 justify-end mt-4">
@@ -190,7 +284,14 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
         >
           Đổi mật khẩu
         </Button>
-        <Button fullWidth variant="light" onPress={() => setStep(1)}>
+        <Button
+          fullWidth
+          variant="light"
+          onPress={() => {
+            setStep(1);
+            setErrors({});
+          }}
+        >
           Quay lại nhập Email
         </Button>
       </div>

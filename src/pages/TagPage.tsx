@@ -130,11 +130,11 @@ export default function TagPage() {
         <div className="lg:col-span-1">
           <div className="mb-8 sticky top-4">
             <div className="mb-8">
-              <img
+              {/* <img
                 alt="QC"
                 className="w-full mx-auto rounded"
                 src="https://adi.admicro.vn/adt/wd/2023/10/banner-300x600.jpg"
-              />
+              /> */}
             </div>
 
             {posts.length > 0 && (
