@@ -1,6 +1,7 @@
 package vn.edu.hcmuaf.fit.ThreePanthers.commons;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -17,4 +18,5 @@ public class ErrorResponse {
     private String errorCode;
     private String message;
     private LocalDateTime timestamp;
+    private Map<String, String> details; // Để lưu validation errors chi tiết
 }
