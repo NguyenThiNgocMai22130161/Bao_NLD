@@ -10,6 +10,11 @@ export enum UserRole {
   REPORTER = 'REPORTER',
   USER = 'USER',
 }
+export enum UserStatus {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+  BLOCKED = 'BLOCKED',
+}
 export enum PostStatus {
   DRAFT = 'DRAFT',
   PENDING = 'PENDING',
@@ -138,4 +143,38 @@ export interface ChangePasswordRequest {
 export interface UpdateProfileRequest {
   username: string;
   email: string;
+}
+
+export interface AdminUser {
+  id: string;
+  username: string;
+  email: string;
+  role: UserRole;
+  status: UserStatus;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface AdminPost {
+  id: string;
+  title: string;
+  slug: string;
+  status: PostStatus;
+  isFeatured: boolean;
+  type: PostType;
+  author?: string | null;
+  category?: string | null;
+  publishedAt?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface AdminUserUpdateRequest {
+  role: UserRole;
+  status: UserStatus;
+}
+
+export interface AdminPostUpdateRequest {
+  status: PostStatus;
+  isFeatured: boolean;
 }
