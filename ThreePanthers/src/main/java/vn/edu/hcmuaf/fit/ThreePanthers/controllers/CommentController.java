@@ -2,6 +2,7 @@ package vn.edu.hcmuaf.fit.ThreePanthers.controllers;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,7 +35,7 @@ public class CommentController {
     @PostMapping
     public SuccessResponse<CommentResponseDto> createComment(
             @PathVariable String postId,
-            @RequestBody CommentRequestDto req) {
+            @Valid @RequestBody CommentRequestDto req) {
         
         return SuccessResponse.<CommentResponseDto>builder()
                 .status(201) 

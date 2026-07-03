@@ -2,6 +2,7 @@ package vn.edu.hcmuaf.fit.ThreePanthers.controllers;
 
 import lombok.RequiredArgsConstructor;
 
+import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +26,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public SuccessResponse<String> register(@RequestBody RegisterRequestDto req) {
+    public SuccessResponse<String> register(@Valid @RequestBody RegisterRequestDto req) {
         authService.register(req); 
         return SuccessResponse.<String>builder()
                 .status(201)
@@ -35,7 +36,7 @@ public class AuthController {
     }
 
     @PostMapping("/verify")
-    public SuccessResponse<String> verify(@RequestBody VerifyRequestDto req) {
+    public SuccessResponse<String> verify(@Valid @RequestBody VerifyRequestDto req) {
         authService.verifyAccount(req);
         return SuccessResponse.<String>builder()
                 .status(200)
@@ -45,7 +46,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public SuccessResponse<AuthResponseDto> login(@RequestBody LoginRequestDto req) {
+    public SuccessResponse<AuthResponseDto> login(@Valid @RequestBody LoginRequestDto req) {
         return SuccessResponse.<AuthResponseDto>builder()
                 .status(200)
                 .message("Đăng nhập thành công")
@@ -54,7 +55,7 @@ public class AuthController {
     }
 
     @PostMapping("/change-password")
-    public SuccessResponse<String> changePassword(@RequestBody ChangePasswordRequestDto req) {
+    public SuccessResponse<String> changePassword(@Valid @RequestBody ChangePasswordRequestDto req) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = auth.getName();
 
@@ -68,7 +69,7 @@ public class AuthController {
     }
 
     @PostMapping("/forgot-password")
-    public SuccessResponse<String> forgotPassword(@RequestBody ForgotPasswordRequestDto req) {
+    public SuccessResponse<String> forgotPassword(@Valid @RequestBody ForgotPasswordRequestDto req) {
         authService.forgotPassword(req);
         return SuccessResponse.<String>builder()
                 .status(200)
@@ -78,7 +79,7 @@ public class AuthController {
     }
 
     @PostMapping("/reset-password")
-    public SuccessResponse<String> resetPassword(@RequestBody ResetPasswordRequestDto req) {
+    public SuccessResponse<String> resetPassword(@Valid @RequestBody ResetPasswordRequestDto req) {
         authService.resetPassword(req);
         return SuccessResponse.<String>builder()
                 .status(200)
