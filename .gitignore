@@ -13,6 +13,7 @@ dist-ssr
 *.local
 
 # Editor directories and files
+.vscode/
 !.vscode/extensions.json
 .idea
 .DS_Store
@@ -22,9 +23,19 @@ dist-ssr
 *.sln
 *.sw?
 
+# Documentation files (keep in repo but ignore changes)
+BAO_CAO_DO_AN.md
+CHECKLIST_BAO_CAO.md
+PHAN_TICH_KY_THUAT.md
+SLIDES_PRESENTATION.md
+TOM_TAT_CONG_NGHE.md
+TONG_KET_KY_THUAT.md
+docs/
+
 
 pnpm-lock.yaml
 yarn.lock
 package-lock.json
 bun.lockb
 repomix-output.*
+.env
