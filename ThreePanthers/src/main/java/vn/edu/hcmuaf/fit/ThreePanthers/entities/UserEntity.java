@@ -59,6 +59,10 @@ public class UserEntity extends BaseEntity implements UserDetails{
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (role == null) {
+            return List.of();
+        }
+
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
@@ -79,11 +83,11 @@ public class UserEntity extends BaseEntity implements UserDetails{
     @Override
     public boolean isAccountNonExpired() { return true; }
     @Override
-    public boolean isAccountNonLocked() { return !status.equals(UserStatus.BLOCKED); }
+    public boolean isAccountNonLocked() { return status == null || !status.equals(UserStatus.BLOCKED); }
     @Override
     public boolean isCredentialsNonExpired() { return true; }
     @Override
     public boolean isEnabled() {
-        return status == UserStatus.ACTIVE;
+        return status != null && status == UserStatus.ACTIVE;
     }
 }

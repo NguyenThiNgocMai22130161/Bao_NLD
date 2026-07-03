@@ -17,12 +17,14 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.Setter;
 import vn.edu.hcmuaf.fit.ThreePanthers.commons.PostStatus;
 import vn.edu.hcmuaf.fit.ThreePanthers.commons.PostType;
 
 @Entity
 @Table(name = "tbl_posts")
 @Getter
+@Setter
 public class PostEntity extends BaseEntity {
     @Column(name = "title")
     private String title;
