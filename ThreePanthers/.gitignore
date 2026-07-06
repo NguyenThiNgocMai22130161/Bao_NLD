@@ -31,7 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
-Dockerfile
+# Dockerfile
 docker-compose.yml
 
 # Environment variables
