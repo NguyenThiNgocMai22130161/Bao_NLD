@@ -102,15 +102,18 @@ public class PostServiceImpl implements PostService {
 
         Page<PostEntity> pageResult = postRepository.findAll(spec, pageable);
 
-        List<PostSummaryResponseDto> items = pageResult.getContent().stream()
+        List<PostSummaryResponseDto> data = pageResult.getContent().stream()
                 .map(this::mapToSummaryDto)
                 .collect(Collectors.toList());
 
         return PageResponse.<PostSummaryResponseDto>builder()
-                .currentPage(filter.getPageNo())
+                .status(200)
+                .message("Lấy danh sách bài viết thành công")
+                .data(data)
+                .page(filter.getPageNo())
+                .size(filter.getPageSize())
                 .totalPages(pageResult.getTotalPages())
                 .totalElements(pageResult.getTotalElements())
-                .items(items)
                 .build();
     }
 

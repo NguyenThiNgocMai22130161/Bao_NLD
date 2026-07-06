@@ -7,9 +7,12 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class PageResponse <T> {
-    private int currentPage;
+public class PageResponse<T> {
+    private int status;
+    private String message;
+    private List<T> data;
+    private int page;
+    private int size;
     private long totalElements;
     private int totalPages;
-    private List<T> items;
 }
