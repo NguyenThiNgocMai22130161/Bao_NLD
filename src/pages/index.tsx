@@ -23,11 +23,20 @@ const useNewsData = () => {
       .then((res) => {
         console.log("all posts api:", res.data);
 
+        // const items =
+        //   (res.data as any)?.items ??
+        //   (res.data as any)?.data?.items ??
+        //   (res.data as any)?.data?.content ??
+        //   [];
         const items =
-          (res.data as any)?.items ??
-          (res.data as any)?.data?.items ??
-          (res.data as any)?.data?.content ??
-          [];
+          Array.isArray((res.data as any)?.data)
+            ? (res.data as any).data
+            : Array.isArray(res.data)
+              ? res.data
+              : (res.data as any)?.items ??
+              (res.data as any)?.data?.items ??
+              (res.data as any)?.data?.content ??
+              [];
 
         setPosts(items);
         return items;
@@ -39,11 +48,20 @@ const useNewsData = () => {
       .then((res) => {
         console.log("featured posts api:", res.data);
 
+        // const items =
+        //   (res.data as any)?.items ??
+        //   (res.data as any)?.data?.items ??
+        //   (res.data as any)?.data?.content ??
+        //   [];
         const items =
-          (res.data as any)?.items ??
-          (res.data as any)?.data?.items ??
-          (res.data as any)?.data?.content ??
-          [];
+          Array.isArray((res.data as any)?.data)
+            ? (res.data as any).data
+            : Array.isArray(res.data)
+              ? res.data
+              : (res.data as any)?.items ??
+              (res.data as any)?.data?.items ??
+              (res.data as any)?.data?.content ??
+              [];
 
         setFeaturedPosts(items);
         return items;
@@ -58,26 +76,26 @@ const useNewsData = () => {
   }, []);
 
 
-  
+
   const data = useMemo(() => {
     if (!posts.length) return {};
 
     // Lấy bài viết theo tag từ featuredPosts (ưu tiên) hoặc posts
     const getByTag = (tag: string) => {
       // Tìm trong featured posts trước
-      const featuredWithTag = featuredPosts.filter((p) => 
+      const featuredWithTag = featuredPosts.filter((p) =>
         p.tags?.some((t) => t.slug.includes(tag))
       );
-      
+
       // Nếu có featured posts với tag này, trả về
       if (featuredWithTag.length > 0) {
         return featuredWithTag;
       }
-      
+
       // Nếu không, tìm trong tất cả posts
       return posts.filter((p) => p.tags?.some((t) => t.slug.includes(tag)));
     };
-    
+
     const cats: Record<string, Post[]> = {};
 
     posts.forEach((p) => {
@@ -91,8 +109,8 @@ const useNewsData = () => {
 
     // Sử dụng featuredPosts nếu có, nếu không thì dùng posts đầu tiên
     const heroPost = featuredPosts[0] ?? posts[0];
-    const subFeaturedPosts = featuredPosts.length >= 4 
-      ? featuredPosts.slice(1, 4) 
+    const subFeaturedPosts = featuredPosts.length >= 4
+      ? featuredPosts.slice(1, 4)
       : posts.slice(1, 4);
 
     return {
@@ -165,7 +183,7 @@ export default function IndexPage() {
 
   return (
     <main className="min-h-screen bg-white pb-20">
-      
+
       <section className="bg-gray-50 py-3 sticky top-0 z-50 backdrop-blur-md bg-opacity-95 border-b border-gray-200">
         <div className="container mx-auto px-4 flex items-center justify-between gap-4 overflow-x-auto">
           <div className="flex items-center gap-2 font-bold text-gray-800 text-sm uppercase shrink-0">
@@ -199,9 +217,9 @@ export default function IndexPage() {
 
       <section className="container mx-auto px-4 mt-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-         
+
           <div className="lg:col-span-9">
-           
+
             <div className="mb-12 border-b border-gray-100 pb-10">
               {hero && <TopStoryCard post={hero} />}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
@@ -225,7 +243,7 @@ export default function IndexPage() {
               </div>
             </div>
 
-            
+
             <SectionTitle title="Tin mới cập nhật" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-12">
               {mainStream
@@ -244,7 +262,7 @@ export default function IndexPage() {
             )}
           </div>
 
-          
+
           <div className="lg:col-span-3 sticky top-20 h-fit">
             {sidebarHot && sidebarHot.length > 0 && (
               <div className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm">
@@ -255,7 +273,7 @@ export default function IndexPage() {
         </div>
       </section>
 
-      
+
       <section className="container mx-auto px-4 py-12 mt-12 bg-gray-50 rounded-xl">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 divide-x divide-gray-200">
           {Object.entries(categories || {}).map(([slug, items], idx) => (
