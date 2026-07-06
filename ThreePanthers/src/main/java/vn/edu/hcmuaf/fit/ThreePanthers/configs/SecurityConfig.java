@@ -30,6 +30,9 @@ public class SecurityConfig {
   private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
   private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
+  @Value("${app.cors.allowed-origins:http://localhost:5173,http://localhost:5174}")
+  private String allowedOrigins;
+
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
@@ -54,29 +57,13 @@ public class SecurityConfig {
     return http.build();
   }
 
-  // @Bean
-  // public CorsConfigurationSource corsConfigurationSource() {
-  // CorsConfiguration configuration = new CorsConfiguration();
-  // configuration.setAllowedOrigins(List.of("http://localhost:5173"));
-  // configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE",
-  // "OPTIONS"));
-  // configuration.setAllowedHeaders(Arrays.asList("Authorization",
-  // "Content-Type", "x-auth-token"));
-  // configuration.setAllowCredentials(true);
-  // UrlBasedCorsConfigurationSource source = new
-  // UrlBasedCorsConfigurationSource();
-  // source.registerCorsConfiguration("/**", configuration);
-  // return source;
-  // }
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
-    // 1. Cho phép cả 2 port 5173 và 5174 của Vite để đề phòng nó tự nhảy port nha
-    // Han
-    configuration.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:5174"));
+    // Dynamic CORS origins from environment variable
+    List<String> origins = Arrays.asList(allowedOrigins.split(","));
+    configuration.setAllowedOrigins(origins);
     configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-    // 2. Thay vì giới hạn, mở rộng cho phép nhận TẤT CẢ các loại Headers từ
-    // Frontend gửi sang
     configuration.setAllowedHeaders(List.of("*"));
     configuration.setAllowCredentials(true);
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
