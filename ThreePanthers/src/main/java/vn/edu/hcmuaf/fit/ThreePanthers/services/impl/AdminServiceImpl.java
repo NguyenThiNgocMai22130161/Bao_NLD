@@ -2,6 +2,8 @@ package vn.edu.hcmuaf.fit.ThreePanthers.services.impl;
 
 import java.util.List;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,7 +60,8 @@ public class AdminServiceImpl implements AdminService {
     @Override
     @Transactional(readOnly = true)
     public List<AdminPostResponseDto> getPosts() {
-        return postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"))
+        Pageable pageable = PageRequest.of(0, 500, Sort.by(Sort.Direction.DESC, "createdAt"));
+        return postRepository.findAll(pageable)
                 .stream()
                 .map(this::toPostDto)
                 .toList();
