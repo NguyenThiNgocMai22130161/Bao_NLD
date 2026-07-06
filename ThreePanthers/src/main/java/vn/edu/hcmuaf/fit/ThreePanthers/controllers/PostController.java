@@ -23,16 +23,28 @@ import vn.edu.hcmuaf.fit.ThreePanthers.services.PostService;
 public class PostController {
     private final PostService postService;
 
+    @GetMapping
+    public SuccessResponse<PageResponse<PostSummaryResponseDto>> getPostsByGet() {
+        PostFilter filter = new PostFilter();
+        PageResponse<PostSummaryResponseDto> pageData = postService.getPost(filter);
+
+        return SuccessResponse.<PageResponse<PostSummaryResponseDto>>builder()
+                .status(200)
+                .message("Lấy danh sách bài viết thành công")
+                .data(pageData)
+                .build();
+    }
+
     @GetMapping("/{slug}")
     public SuccessResponse<PostDetailResponseDto> getPostDetail(@PathVariable("slug") String slug) {
         return SuccessResponse.<PostDetailResponseDto>builder()
                 .status(200)
-                .message("Lấy chi tiết bài viest thành công")
+                .message("Lấy chi tiết bài viết thành công")
                 .data(postService.getPostDetail(slug))
                 .build();
     }
 
-    @PostMapping()
+    @PostMapping
     public SuccessResponse<PageResponse<PostSummaryResponseDto>> getPosts(@RequestBody PostFilter filter) {
         PageResponse<PostSummaryResponseDto> pageData = postService.getPost(filter);
 
