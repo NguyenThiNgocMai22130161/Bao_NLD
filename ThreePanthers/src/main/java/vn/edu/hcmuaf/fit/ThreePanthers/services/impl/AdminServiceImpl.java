@@ -1,10 +1,7 @@
 package vn.edu.hcmuaf.fit.ThreePanthers.services.impl;
 
-import java.util.List;
-
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,11 +26,9 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<AdminUserResponseDto> getUsers() {
-        return userRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"))
-                .stream()
-                .map(this::toUserDto)
-                .toList();
+    public Page<AdminUserResponseDto> getUsers(Pageable pageable) {
+        return userRepository.findAll(pageable)
+                .map(this::toUserDto);
     }
 
     @Override
@@ -59,12 +54,9 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<AdminPostResponseDto> getPosts() {
-        Pageable pageable = PageRequest.of(0, 500, Sort.by(Sort.Direction.DESC, "createdAt"));
+    public Page<AdminPostResponseDto> getPosts(Pageable pageable) {
         return postRepository.findAll(pageable)
-                .stream()
-                .map(this::toPostDto)
-                .toList();
+                .map(this::toPostDto);
     }
 
     @Override

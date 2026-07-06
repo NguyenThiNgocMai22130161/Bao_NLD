@@ -5,14 +5,14 @@ import {
   AdminPostUpdateRequest,
   AdminUser,
   AdminUserUpdateRequest,
-  ApiListResponse,
+  ApiPageResponse,
   ApiResponse,
 } from '@/types';
 
 export const adminService = {
-  getUsers: async (): Promise<ApiListResponse<AdminUser>> => {
-    const response = await apiClient.get<ApiListResponse<AdminUser>>(
-      '/api/admin/users'
+  getUsers: async (page: number = 0, size: number = 100): Promise<ApiPageResponse<AdminUser>> => {
+    const response = await apiClient.get<ApiPageResponse<AdminUser>>(
+      `/api/admin/users?page=${page}&size=${size}&sortBy=createdAt&sortDirection=DESC`
     );
 
     return response.data;
@@ -38,9 +38,9 @@ export const adminService = {
     return response.data;
   },
 
-  getPosts: async (): Promise<ApiListResponse<AdminPost>> => {
-    const response = await apiClient.get<ApiListResponse<AdminPost>>(
-      '/api/admin/posts'
+  getPosts: async (page: number = 0, size: number = 100): Promise<ApiPageResponse<AdminPost>> => {
+    const response = await apiClient.get<ApiPageResponse<AdminPost>>(
+      `/api/admin/posts?page=${page}&size=${size}&sortBy=createdAt&sortDirection=DESC`
     );
 
     return response.data;

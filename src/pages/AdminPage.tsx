@@ -326,13 +326,47 @@ export default function AdminPage() {
   const refresh = async () => {
     try {
       setLoading(true);
-      const [userRes, postRes] = await Promise.all([
-        adminService.getUsers(),
-        adminService.getPosts(),
+      
+      // Fetch first page to get total
+      const [firstUserPage, firstPostPage] = await Promise.all([
+        adminService.getUsers(0, 100),
+        adminService.getPosts(0, 100),
       ]);
+      
+      // If we have more data, fetch remaining pages
+      const userPromises = [];
+      const postPromises = [];
+      
+      if (firstUserPage.totalPages > 1) {
+        for (let i = 1; i < firstUserPage.totalPages; i++) {
+          userPromises.push(adminService.getUsers(i, 100));
+        }
+      }
+      
+      if (firstPostPage.totalPages > 1) {
+        for (let i = 1; i < firstPostPage.totalPages; i++) {
+          postPromises.push(adminService.getPosts(i, 100));
+        }
+      }
+      
+      const [additionalUsers, additionalPosts] = await Promise.all([
+        Promise.all(userPromises),
+        Promise.all(postPromises),
+      ]);
+      
+      // Combine all data
+      const allUsers = [
+        ...firstUserPage.data,
+        ...additionalUsers.flatMap(res => res.data),
+      ];
+      
+      const allPosts = [
+        ...firstPostPage.data,
+        ...additionalPosts.flatMap(res => res.data),
+      ];
 
-      setUsers(userRes.data ?? []);
-      setPosts(postRes.data ?? []);
+      setUsers(allUsers);
+      setPosts(allPosts);
     } catch (error) {
       console.error('Load admin data error:', error);
       setUsers([]);

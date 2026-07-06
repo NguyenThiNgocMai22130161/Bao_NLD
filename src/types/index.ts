@@ -91,6 +91,17 @@ export interface ApiListResponse<T> {
   message: string;
   data: T[];
 }
+
+export interface ApiPageResponse<T> {
+  status: number;
+  message: string;
+  data: T[];
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+}
+
 export interface PageData<T> {
   currentPage: number;
   totalElements: number;
