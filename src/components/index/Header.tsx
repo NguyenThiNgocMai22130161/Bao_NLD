@@ -55,22 +55,26 @@ const menuItems = [
 ];
 
 const primaryMenus = [
-  { title: 'Thời sự', items: ['Chính trị', 'Xã hội', 'Đô thị'] },
-  { title: 'Quốc tế', items: ['Người Việt đó đây', 'Hay - lạ', 'Vấn đề nóng'] },
+  { title: 'Thời sự', slug: 'thoi-su', items: ['Chính trị', 'Xã hội', 'Đô thị'] },
+  { title: 'Quốc tế', slug: 'quoc-te', items: ['Người Việt đó đây', 'Hay - lạ', 'Vấn đề nóng'] },
   {
     title: 'Lao động',
+    slug: 'lao-dong',
     items: ['Công đoàn - Công nhân', 'Việc làm', 'An sinh xã hội'],
   },
   {
     title: 'Bạn đọc',
+    slug: 'ban-doc',
     items: ['Cuộc sống nhân ái', 'Tôi lên tiếng', 'Góc ảnh bạn đọc'],
   },
   {
     title: 'Net Zero',
+    slug: 'net-zero',
     items: ['Tin tức & Xu hướng', 'Chuyển đổi xanh', 'Sống xanh', 'Cẩm nang'],
   },
   {
     title: 'Kinh tế',
+    slug: 'kinh-te',
     items: [
       'Kinh doanh',
       'Tiêu dùng',
@@ -81,24 +85,28 @@ const primaryMenus = [
   },
   {
     title: 'Sức khỏe',
+    slug: 'suc-khoe',
     items: ['Chuyển động y học', 'Giới tính', 'Bác sĩ của bạn', 'Khỏe và đẹp'],
   },
-  { title: 'Giáo dục', items: ['Du học', 'Tuyển sinh', 'Sau bục giảng'] },
+  { title: 'Giáo dục', slug: 'giao-duc-khoa-hoc', items: ['Du học', 'Tuyển sinh', 'Sau bục giảng'] },
   {
     title: 'Pháp luật',
+    slug: 'phap-luat',
     items: ['Luật sư của bạn', 'Truy nã', 'Chuyện pháp đình'],
   },
   {
     title: 'Văn hóa - Văn nghệ',
+    slug: 'van-hoa-van-nghe',
     items: ['Âm nhạc', 'Văn học', 'Sân khấu', 'Điện ảnh'],
   },
-  { title: 'Giải trí', items: ['Hậu trường showbiz', 'Chuyện của sao'] },
-  { title: 'Thể thao', items: ['Bóng đá', 'Golf', 'Tennis', 'Marathon'] },
-  { title: 'AI 365', items: ['Công nghệ số', 'Bảo mật', 'Mạng xã hội'] },
-  { title: 'Phụ nữ', items: ['Khỏe-đẹp', 'Tâm sự', 'Món ngon', 'Video'] },
-  { title: 'Gia đình', items: ['Cha mẹ và con cái', 'Không gian sống'] },
-  { title: 'Địa ốc', items: ['Dự án', 'Thị trường', 'Nhà đẹp'] },
+  { title: 'Giải trí', slug: 'giai-tri', items: ['Hậu trường showbiz', 'Chuyện của sao'] },
+  { title: 'Thể thao', slug: 'the-thao', items: ['Bóng đá', 'Golf', 'Tennis', 'Marathon'] },
+  { title: 'AI 365', slug: 'ai-365', items: ['Công nghệ số', 'Bảo mật', 'Mạng xã hội'] },
+  { title: 'Phụ nữ', slug: 'phu-nu', items: ['Khỏe-đẹp', 'Tâm sự', 'Món ngon', 'Video'] },
+  { title: 'Gia đình', slug: 'gia-dinh', items: ['Cha mẹ và con cái', 'Không gian sống'] },
+  { title: 'Địa ốc', slug: 'dia-oc', items: ['Dự án', 'Thị trường', 'Nhà đẹp'] },
 ];
+
 
 const featureLinks = [
   { label: 'Video', icon: <PlayIcon className="w-5 h-5 text-blue-600" /> },
@@ -296,7 +304,7 @@ export const MainNav = () => {
           <div className="container mx-auto px-6 py-6 grid grid-cols-1 md:grid-cols-[1fr_320px] gap-8">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
               {primaryMenus.map((group) => {
-                const parentSlug = slugify(group.title);
+                const parentSlug = group.slug;
 
                 return (
                   <div key={group.title}>
@@ -314,7 +322,7 @@ export const MainNav = () => {
                         <li key={item}>
                           <Link
                             className="block px-2 py-1 rounded text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600"
-                            to={`/${parentSlug}/${slugify(item)}`}
+                            to={`/${parentSlug}`}
                             onClick={() => setShowMegaMenu(false)}
                           >
                             {item}
