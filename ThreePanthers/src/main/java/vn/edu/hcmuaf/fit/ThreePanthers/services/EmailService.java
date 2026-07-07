@@ -26,12 +26,12 @@ public class EmailService {
     public void sendVerificationEmail(String toEmail, String username, String code) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom("ntngocmailgl@gmail.com"); // ← Thêm from address
+            message.setFrom("ntngocmaigl@gmail.com"); // ← Thêm from address
             message.setTo(toEmail);
             message.setSubject("Xác thực tài khoản ThreePanthers");
             message.setText("Xin chào " + username + ",\n\n"
                     + "Mã xác thực tài khoản của bạn là: " + code + "\n"
-                    + "Mã này sẽ hết hạn sau 15 phút.\n\n"
+                    + "Mã này sẽ hết hạn sau 24 giờ.\n\n"
                     + "Trân trọng,");
             
             mailSender.send(message);
@@ -46,12 +46,12 @@ public class EmailService {
     public void sendForgotPasswordEmail(String toEmail, String username, String otp) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom("ntngocmailgl@gmail.com");
+            message.setFrom("ntngocmaigl@gmail.com");
             message.setTo(toEmail);
             message.setSubject("Yêu cầu đặt lại mật khẩu - ThreePanthers");
             message.setText("Xin chào " + username + ",\n\n"
                     + "Bạn vừa yêu cầu đặt lại mật khẩu. Mã xác thực (OTP) của bạn là: " + otp + "\n"
-                    + "Mã này sẽ hết hạn sau 15 phút.\n"
+                    + "Mã này sẽ hết hạn sau 24 giờ.\n"
                     + "Nếu bạn không yêu cầu điều này, vui lòng bỏ qua email này.\n\n"
                     + "Trân trọng,");
             

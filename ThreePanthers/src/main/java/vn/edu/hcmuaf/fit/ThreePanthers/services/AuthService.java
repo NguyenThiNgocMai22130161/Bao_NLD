@@ -1,7 +1,5 @@
 package vn.edu.hcmuaf.fit.ThreePanthers.services;
 
-import lombok.RequiredArgsConstructor;
-
 import java.time.LocalDateTime;
 import java.util.Random;
 
@@ -9,6 +7,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
+import vn.edu.hcmuaf.fit.ThreePanthers.commons.JwtUtils;
 import vn.edu.hcmuaf.fit.ThreePanthers.commons.UserRole;
 import vn.edu.hcmuaf.fit.ThreePanthers.commons.UserStatus;
 import vn.edu.hcmuaf.fit.ThreePanthers.dtos.req.ChangePasswordRequestDto;
@@ -20,7 +21,6 @@ import vn.edu.hcmuaf.fit.ThreePanthers.dtos.req.VerifyRequestDto;
 import vn.edu.hcmuaf.fit.ThreePanthers.dtos.res.AuthResponseDto;
 import vn.edu.hcmuaf.fit.ThreePanthers.entities.UserEntity;
 import vn.edu.hcmuaf.fit.ThreePanthers.repositories.UserRepository;
-import vn.edu.hcmuaf.fit.ThreePanthers.commons.JwtUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -47,7 +47,7 @@ public class AuthService {
         String code = String.valueOf(new Random().nextInt(900000) + 100000);
 
         user.setVerificationCode(code);
-        user.setVerificationExpiration(LocalDateTime.now().plusMinutes(15)); 
+        user.setVerificationExpiration(LocalDateTime.now().plusHours(24)); // 24 giờ 
 
         userRepository.save(user);
 
