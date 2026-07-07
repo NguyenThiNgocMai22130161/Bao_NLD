@@ -66,9 +66,22 @@ export default function CategoryPage() {
           const detailRes = await categoryService.getDetail(effectiveSlug, page, 10);
           const detailData = detailRes.data.data;
 
+          const categoryPosts =
+            Array.isArray((detailData as any)?.posts?.data)
+              ? (detailData as any).posts.data
+              : Array.isArray((detailData as any)?.posts?.items)
+                ? (detailData as any).posts.items
+                : Array.isArray((detailData as any)?.posts?.content)
+                  ? (detailData as any).posts.content
+                  : [];
+
           setCategoryDetail(detailData?.category ?? null);
-          setPosts(detailData?.posts?.items ?? []);
-          setTotalPages(detailData?.posts?.totalPages ?? 0);
+          setPosts(categoryPosts);
+          setTotalPages(
+            (detailData as any)?.posts?.totalPages ??
+            (detailData as any)?.posts?.totalPage ??
+            0
+          );
           return;
         }
 
@@ -86,8 +99,22 @@ export default function CategoryPage() {
         }
 
         const res = await postService.getPosts(filter);
-        setPosts(res.data?.items ?? []);
-        setTotalPages(res.data?.totalPages ?? 0);
+
+        const items =
+          Array.isArray((res.data as any)?.data)
+            ? (res.data as any).data
+            : Array.isArray((res.data as any)?.items)
+              ? (res.data as any).items
+              : Array.isArray((res.data as any)?.content)
+                ? (res.data as any).content
+                : [];
+
+        setPosts(items);
+        setTotalPages(
+          (res.data as any)?.totalPages ??
+          (res.data as any)?.totalPage ??
+          0
+        );
       } catch (e) {
         console.error("Fetch category posts error:", e);
         setPosts([]);

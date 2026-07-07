@@ -46,11 +46,16 @@ export const CategoryNews = ({ categoriesSlug }: CategoryNewsProps) => {
 
       const response = await postService.getPosts(filter);
 
-      if (response && response.data && response.data.items) {
-        setPosts(response.data.items.slice(0, 6));
-      } else {
-        setPosts([]);
-      }
+      const items =
+        Array.isArray((response.data as any)?.data)
+          ? (response.data as any).data
+          : Array.isArray((response.data as any)?.items)
+            ? (response.data as any).items
+            : Array.isArray((response.data as any)?.content)
+              ? (response.data as any).content
+              : [];
+
+      setPosts(items.slice(0, 6));
     } catch (error) {
       setPosts([]);
     } finally {

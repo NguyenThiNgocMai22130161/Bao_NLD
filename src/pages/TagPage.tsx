@@ -29,11 +29,16 @@ export default function TagPage() {
         };
         const response = await postService.getPosts(filter);
 
-        if (response?.data?.items) {
-          setPosts(response.data.items);
-        } else {
-          setPosts([]);
-        }
+        const items =
+          Array.isArray((response.data as any)?.data)
+            ? (response.data as any).data
+            : Array.isArray((response.data as any)?.items)
+              ? (response.data as any).items
+              : Array.isArray((response.data as any)?.content)
+                ? (response.data as any).content
+                : [];
+
+        setPosts(items);
       } catch (error) {
         console.error('Error fetching posts by tag:', error);
       } finally {
