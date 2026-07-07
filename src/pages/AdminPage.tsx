@@ -36,7 +36,6 @@ import {
 } from '@/types';
 
 type AdminTab = 'users' | 'posts';
-//
 const userRoles: UserRole[] = [
   UserRole.ADMIN,
   UserRole.EDITOR,
@@ -326,40 +325,40 @@ export default function AdminPage() {
   const refresh = async () => {
     try {
       setLoading(true);
-      
+
       // Fetch first page to get total
       const [firstUserPage, firstPostPage] = await Promise.all([
         adminService.getUsers(0, 100),
         adminService.getPosts(0, 100),
       ]);
-      
+
       // If we have more data, fetch remaining pages
       const userPromises = [];
       const postPromises = [];
-      
+
       if (firstUserPage.totalPages > 1) {
         for (let i = 1; i < firstUserPage.totalPages; i++) {
           userPromises.push(adminService.getUsers(i, 100));
         }
       }
-      
+
       if (firstPostPage.totalPages > 1) {
         for (let i = 1; i < firstPostPage.totalPages; i++) {
           postPromises.push(adminService.getPosts(i, 100));
         }
       }
-      
+
       const [additionalUsers, additionalPosts] = await Promise.all([
         Promise.all(userPromises),
         Promise.all(postPromises),
       ]);
-      
+
       // Combine all data
       const allUsers = [
         ...firstUserPage.data,
         ...additionalUsers.flatMap(res => res.data),
       ];
-      
+
       const allPosts = [
         ...firstPostPage.data,
         ...additionalPosts.flatMap(res => res.data),
@@ -591,8 +590,8 @@ export default function AdminPage() {
                   <div className="inline-flex rounded-2xl bg-slate-100 p-1">
                     <button
                       className={`rounded-xl px-4 py-2 text-sm font-semibold transition-colors ${activeTab === 'users'
-                          ? 'bg-white text-[#004b9a] shadow-sm'
-                          : 'text-slate-600'
+                        ? 'bg-white text-[#004b9a] shadow-sm'
+                        : 'text-slate-600'
                         }`}
                       onClick={() => setActiveTab('users')}
                     >
@@ -600,8 +599,8 @@ export default function AdminPage() {
                     </button>
                     <button
                       className={`rounded-xl px-4 py-2 text-sm font-semibold transition-colors ${activeTab === 'posts'
-                          ? 'bg-white text-[#004b9a] shadow-sm'
-                          : 'text-slate-600'
+                        ? 'bg-white text-[#004b9a] shadow-sm'
+                        : 'text-slate-600'
                         }`}
                       onClick={() => setActiveTab('posts')}
                     >
