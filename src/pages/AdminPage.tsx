@@ -36,7 +36,7 @@ import {
 } from '@/types';
 
 type AdminTab = 'users' | 'posts';
-
+//
 const userRoles: UserRole[] = [
   UserRole.ADMIN,
   UserRole.EDITOR,
@@ -467,7 +467,7 @@ export default function AdminPage() {
                 Quản trị nội dung Báo Lao Động một cách tập trung và hiệu quả
               </h1>
               <p className="mt-4 max-w-2xl text-sm leading-6 text-white/80 md:text-base">
-                Quản lý tài khoản người dùng, bài viết và danh mục tin tức trên một hệ thống thống nhất, 
+                Quản lý tài khoản người dùng, bài viết và danh mục tin tức trên một hệ thống thống nhất,
                 giúp kiểm soát nội dung nhanh chóng, chính xác và an toàn.
               </p>
             </div>
@@ -556,21 +556,19 @@ export default function AdminPage() {
 
                   <div className="inline-flex rounded-2xl bg-slate-100 p-1">
                     <button
-                      className={`rounded-xl px-4 py-2 text-sm font-semibold transition-colors ${
-                        activeTab === 'users'
+                      className={`rounded-xl px-4 py-2 text-sm font-semibold transition-colors ${activeTab === 'users'
                           ? 'bg-white text-[#004b9a] shadow-sm'
                           : 'text-slate-600'
-                      }`}
+                        }`}
                       onClick={() => setActiveTab('users')}
                     >
                       Người dùng
                     </button>
                     <button
-                      className={`rounded-xl px-4 py-2 text-sm font-semibold transition-colors ${
-                        activeTab === 'posts'
+                      className={`rounded-xl px-4 py-2 text-sm font-semibold transition-colors ${activeTab === 'posts'
                           ? 'bg-white text-[#004b9a] shadow-sm'
                           : 'text-slate-600'
-                      }`}
+                        }`}
                       onClick={() => setActiveTab('posts')}
                     >
                       Bài viết
