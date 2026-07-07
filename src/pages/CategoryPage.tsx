@@ -117,8 +117,38 @@ export default function CategoryPage() {
         );
       } catch (e) {
         console.error("Fetch category posts error:", e);
-        setPosts([]);
-        setTotalPages(0);
+
+        // Fallback: nếu childSlug không tồn tại trong DB (subcategory chưa có),
+        // tự động dùng parent categorySlug để hiển thị bài viết của danh mục cha
+        if (childSlug && categorySlug && effectiveSlug === childSlug) {
+          try {
+            const fallbackRes = await categoryService.getDetail(categorySlug, page, 10);
+            const fallbackData = fallbackRes.data.data;
+
+            const fallbackPosts =
+              Array.isArray((fallbackData as any)?.posts?.data)
+                ? (fallbackData as any).posts.data
+                : Array.isArray((fallbackData as any)?.posts?.items)
+                  ? (fallbackData as any).posts.items
+                  : Array.isArray((fallbackData as any)?.posts?.content)
+                    ? (fallbackData as any).posts.content
+                    : [];
+
+            setCategoryDetail(fallbackData?.category ?? null);
+            setPosts(fallbackPosts);
+            setTotalPages(
+              (fallbackData as any)?.posts?.totalPages ??
+              (fallbackData as any)?.posts?.totalPage ??
+              0
+            );
+          } catch {
+            setPosts([]);
+            setTotalPages(0);
+          }
+        } else {
+          setPosts([]);
+          setTotalPages(0);
+        }
       } finally {
         setLoading(false);
         window.scrollTo({ top: 0, behavior: "smooth" });
@@ -135,9 +165,10 @@ export default function CategoryPage() {
     if (routeType && categoriesLoading) return;
 
     fetchPageData();
-  }, [effectiveSlug, routeType, page, categoriesLoading]);
+  }, [effectiveSlug, routeType, page, categoriesLoading, categorySlug, childSlug]);
 
-  if (!routeType && effectiveSlug && !loading && !categoryDetail) {
+  // Chỉ hiện "Không tìm thấy" khi không có category detail VÀ không có bài viết nào
+  if (!routeType && effectiveSlug && !loading && !categoryDetail && posts.length === 0) {
     return (
       <div className="text-center mt-20 text-gray-500">
         Không tìm thấy chuyên mục
