@@ -25,6 +25,7 @@ import { FaFacebookF, FaYoutube, FaRss } from 'react-icons/fa';
 import { SiZalo } from 'react-icons/si';
 
 import { useAuth } from '@/contexts/AuthContext';
+import ThemeToggle from '../common/ThemeToggle';
 
 const slugify = (text: string) =>
   text
@@ -137,7 +138,7 @@ export const HeaderTop = () => {
 
   return (
     <header className="w-full">
-      <div className="bg-white border-b">
+      <div className="bg-white dark:bg-gray-900 border-b dark:border-gray-700">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-6">
             <Link
@@ -147,17 +148,19 @@ export const HeaderTop = () => {
               NGƯỜI LAO ĐỘNG
             </Link>
 
-            <div className="hidden lg:flex flex-col border-l pl-4">
-              <span className="text-xs font-bold text-blue-800">
+            <div className="hidden lg:flex flex-col border-l dark:border-gray-700 pl-4">
+              <span className="text-xs font-bold text-blue-800 dark:text-blue-400">
                 NGƯỜI LAO ĐỘNG News
               </span>
-              <span className="text-sm text-gray-500">{today}</span>
+              <span className="text-sm text-gray-500 dark:text-gray-400">{today}</span>
             </div>
           </div>
 
           <div className="flex items-center gap-4">
+            <ThemeToggle />
+            
             <input
-              className="hidden md:block border rounded-full px-4 py-2 text-sm w-64"
+              className="hidden md:block border rounded-full px-4 py-2 text-sm w-64 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
               placeholder="Tìm kiếm"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -254,12 +257,12 @@ export const MainNav = () => {
 
   return (
     <>
-      <div className="bg-[#004b9a] text-white">
+      <div className="bg-[#004b9a] dark:bg-gray-800 text-white">
         <div className="container mx-auto px-4">
           <ul className="flex items-center whitespace-nowrap overflow-hidden">
             <li>
               <Link
-                className="flex items-center px-2 py-2 hover:bg-blue-700"
+                className="flex items-center px-2 py-2 hover:bg-blue-700 dark:hover:bg-gray-700"
                 to="/"
               >
                 <HomeIcon className="w-6 h-6" />
@@ -269,7 +272,7 @@ export const MainNav = () => {
             {menuItems.map((item) => (
               <li key={item.slug}>
                 <Link
-                  className="px-2 py-2 text-xs font-semibold uppercase hover:bg-blue-700 block"
+                  className="px-2 py-2 text-xs font-semibold uppercase hover:bg-blue-700 dark:hover:bg-gray-700 block"
                   to={`/${item.slug}`}
                 >
                   {item.label}
@@ -279,7 +282,7 @@ export const MainNav = () => {
 
             <li className="ml-auto">
               <button
-                className="px-3 py-2 text-xl font-bold hover:bg-blue-700"
+                className="px-3 py-2 text-xl font-bold hover:bg-blue-700 dark:hover:bg-gray-700"
                 onClick={() => setShowMegaMenu((v) => !v)}
                 aria-expanded={showMegaMenu}
                 aria-label="Toggle mega menu"
@@ -292,7 +295,7 @@ export const MainNav = () => {
       </div>
 
       {showMegaMenu && (
-        <div ref={megaMenuRef} className="bg-white border-b shadow-sm">
+        <div ref={megaMenuRef} className="bg-white dark:bg-gray-900 border-b dark:border-gray-700 shadow-sm">
           <div className="container mx-auto px-6 py-6 grid grid-cols-1 md:grid-cols-[1fr_320px] gap-8">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
               {primaryMenus.map((group) => {
@@ -300,7 +303,7 @@ export const MainNav = () => {
 
                 return (
                   <div key={group.title}>
-                    <h4 className="mb-3 font-semibold text-blue-800 uppercase text-sm">
+                    <h4 className="mb-3 font-semibold text-blue-800 dark:text-blue-400 uppercase text-sm">
                       <Link
                         to={`/${parentSlug}`}
                         onClick={() => setShowMegaMenu(false)}
@@ -313,7 +316,7 @@ export const MainNav = () => {
                       {group.items.map((item) => (
                         <li key={item}>
                           <Link
-                            className="block px-2 py-1 rounded text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600"
+                            className="block px-2 py-1 rounded text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-blue-600 dark:hover:text-blue-400"
                             to={`/${parentSlug}/${slugify(item)}`}
                             onClick={() => setShowMegaMenu(false)}
                           >
@@ -327,8 +330,8 @@ export const MainNav = () => {
               })}
             </div>
 
-            <div className="border-l pl-6">
-              <h4 className="mb-4 font-semibold text-blue-800 uppercase text-sm">
+            <div className="border-l dark:border-gray-700 pl-6">
+              <h4 className="mb-4 font-semibold text-blue-800 dark:text-blue-400 uppercase text-sm">
                 Định dạng
               </h4>
 
@@ -336,7 +339,7 @@ export const MainNav = () => {
                 {featureLinks.map((item) => (
                   <Link
                     key={item.label}
-                    className="flex items-center gap-3 border rounded-lg px-4 py-3 hover:bg-gray-50 cursor-pointer text-gray-800"
+                    className="flex items-center gap-3 border dark:border-gray-700 rounded-lg px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer text-gray-800 dark:text-gray-200"
                     to={`/${item.label.toLowerCase()}`}
                     onClick={() => setShowMegaMenu(false)}
                   >
@@ -346,12 +349,12 @@ export const MainNav = () => {
                 ))}
               </div>
 
-              <hr className="my-6" />
+              <hr className="my-6 dark:border-gray-700" />
 
-              <ul className="space-y-3 text-sm text-gray-700">
+              <ul className="space-y-3 text-sm text-gray-700 dark:text-gray-300">
                 <li>
                   <Link
-                    className="flex items-center gap-3 hover:text-blue-600"
+                    className="flex items-center gap-3 hover:text-blue-600 dark:hover:text-blue-400"
                     to="/ly-tuong-song"
                     onClick={() => setShowMegaMenu(false)}
                   >
@@ -360,7 +363,7 @@ export const MainNav = () => {
                 </li>
                 <li>
                   <Link
-                    className="flex items-center gap-3 hover:text-blue-600"
+                    className="flex items-center gap-3 hover:text-blue-600 dark:hover:text-blue-400"
                     to="/noi-thang"
                     onClick={() => setShowMegaMenu(false)}
                   >
@@ -369,7 +372,7 @@ export const MainNav = () => {
                 </li>
                 <li>
                   <Link
-                    className="flex items-center gap-3 hover:text-blue-600"
+                    className="flex items-center gap-3 hover:text-blue-600 dark:hover:text-blue-400"
                     to="/tin-doc-quyen"
                     onClick={() => setShowMegaMenu(false)}
                   >
@@ -378,7 +381,7 @@ export const MainNav = () => {
                 </li>
                 <li>
                   <Link
-                    className="flex items-center gap-3 hover:text-blue-600"
+                    className="flex items-center gap-3 hover:text-blue-600 dark:hover:text-blue-400"
                     to="/thi-truong"
                     onClick={() => setShowMegaMenu(false)}
                   >
@@ -396,11 +399,11 @@ export const MainNav = () => {
                 </li>
               </ul>
 
-              <hr className="my-6" />
+              <hr className="my-6 dark:border-gray-700" />
 
               <div className="flex items-center gap-4">
                 <a
-                  className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 hover:bg-blue-600 hover:text-white"
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-blue-600 hover:text-white"
                   href="https://www.facebook.com/nguoilaodong"
                   rel="noopener noreferrer"
                   target="_blank"
@@ -409,7 +412,7 @@ export const MainNav = () => {
                 </a>
 
                 <a
-                  className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 hover:bg-red-600 hover:text-white"
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-red-600 hover:text-white"
                   href="https://www.youtube.com/@nguoilaodong"
                   rel="noopener noreferrer"
                   target="_blank"
@@ -418,7 +421,7 @@ export const MainNav = () => {
                 </a>
 
                 <a
-                  className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 hover:bg-blue-500 hover:text-white"
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-blue-500 hover:text-white"
                   href="https://zalo.me"
                   rel="noopener noreferrer"
                   target="_blank"
@@ -428,7 +431,7 @@ export const MainNav = () => {
 
                 <a
                  
-                  className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 hover:bg-orange-500 hover:text-white"
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-orange-500 hover:text-white"
                  
                   href="/rss"
                 

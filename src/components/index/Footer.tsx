@@ -17,15 +17,15 @@ export const Footer = () => {
   };
 
   return (
-    <footer className="bg-[#f7f7f7] pt-12 pb-6 border-t-4 border-[#d80f1e] mt-10 text-[#333] font-sans">
+    <footer className="bg-[#f7f7f7] dark:bg-gray-800 pt-12 pb-6 border-t-4 border-[#d80f1e] mt-10 text-[#333] dark:text-gray-300 font-sans">
       <div className="container mx-auto px-4">
-        <div className="mb-8 border-b border-gray-300 pb-6">
+        <div className="mb-8 border-b border-gray-300 dark:border-gray-700 pb-6">
           <Link className="inline-block mb-4" to="/">
             <h1 className="text-[#d80f1e] font-black text-4xl tracking-tighter uppercase">
               NGƯỜI LAO ĐỘNG
             </h1>
           </Link>
-          <div className="flex flex-wrap gap-x-5.5 gap-y-2 text-sm font-medium text-gray-600">
+          <div className="flex flex-wrap gap-x-5.5 gap-y-2 text-sm font-medium text-gray-600 dark:text-gray-400">
             {[
               'Thời sự',
               'Quốc tế',
@@ -57,7 +57,7 @@ export const Footer = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-[13px] leading-6">
           <div>
-            <h3 className="font-bold text-base mb-3 text-gray-800 uppercase">
+            <h3 className="font-bold text-base mb-3 text-gray-800 dark:text-gray-200 uppercase">
               BÁO NGƯỜI LAO ĐỘNG ĐIỆN TỬ
             </h3>
             <p className="mb-2">
@@ -74,27 +74,27 @@ export const Footer = () => {
           </div>
 
           <div>
-            <h3 className="font-bold text-base mb-3 text-gray-800 uppercase">
+            <h3 className="font-bold text-base mb-3 text-gray-800 dark:text-gray-200 uppercase">
               TRỤ SỞ CHÍNH
             </h3>
             <p className="mb-1">
               Đường số 6, Phường Linh Trung, TP Thủ Đức, TPHCM
             </p>
             <p className="mb-1">
-              Điện thoại: <span className="text-blue-600">098-765.4321</span> /{' '}
-              <span className="text-blue-600">012-345.6789</span>
+              Điện thoại: <span className="text-blue-600 dark:text-blue-400">098-765.4321</span> /{' '}
+              <span className="text-blue-600 dark:text-blue-400">012-345.6789</span>
             </p>
             <p className="mb-4">
-              Fax: <span className="text-blue-600">012-1234.4321</span>
+              Fax: <span className="text-blue-600 dark:text-blue-400">012-1234.4321</span>
             </p>
 
-            <h4 className="font-bold mt-4 uppercase text-gray-700">
+            <h4 className="font-bold mt-4 uppercase text-gray-700 dark:text-gray-300">
               LIÊN HỆ QUẢNG CÁO
             </h4>
             <p>LIÊN HỆ QUẢNG CÁO BÁO ĐIỆN TỬ</p>
             <p>
               Email:{' '}
-              <span className="text-gray-600">
+              <span className="text-gray-600 dark:text-gray-400">
                 lienhequangbadoanhnghiep@gmail.com
               </span>
             </p>
@@ -102,7 +102,7 @@ export const Footer = () => {
           </div>
 
           <div>
-            <h3 className="font-bold text-base mb-3 text-gray-800 uppercase">
+            <h3 className="font-bold text-base mb-3 text-gray-800 dark:text-gray-200 uppercase">
               THEO DÕI CHÚNG TÔI
             </h3>
             <div className="flex gap-3 mb-6">
@@ -140,11 +140,11 @@ export const Footer = () => {
               </a>
             </div>
 
-            <h3 className="font-bold text-base mb-3 text-gray-800 uppercase">
+            <h3 className="font-bold text-base mb-3 text-gray-800 dark:text-gray-200 uppercase">
               TẢI ỨNG DỤNG
             </h3>
             <div className="flex gap-3">
-              <button className="bg-black text-white px-3 py-1.5 rounded flex items-center gap-2 hover:bg-gray-800">
+              <button className="bg-black dark:bg-gray-700 text-white px-3 py-1.5 rounded flex items-center gap-2 hover:bg-gray-800 dark:hover:bg-gray-600">
                 <svg
                   className="w-5 h-5"
                   fill="currentColor"
@@ -158,7 +158,7 @@ export const Footer = () => {
                 </div>
               </button>
 
-              <button className="bg-black text-white px-3 py-1.5 rounded flex items-center gap-2 hover:bg-gray-800">
+              <button className="bg-black dark:bg-gray-700 text-white px-3 py-1.5 rounded flex items-center gap-2 hover:bg-gray-800 dark:hover:bg-gray-600">
                 <svg
                   className="w-5 h-5"
                   fill="currentColor"
@@ -175,7 +175,7 @@ export const Footer = () => {
           </div>
         </div>
 
-        <div className="relative border-t border-gray-500 mt-8 pt-4 text-xs text-gray-500 text-center">
+        <div className="relative border-t border-gray-500 dark:border-gray-600 mt-8 pt-4 text-xs text-gray-500 dark:text-gray-400 text-center">
           <p>
             Bản quyền thuộc về Báo Người Lao Động. Các website khác đã được
             chúng tôi đồng ý cho khai thác thông tin, khi đăng lại phải ghi rõ
@@ -186,12 +186,12 @@ export const Footer = () => {
 
       {showTop && (
         <button
-          className="fixed right-4 top-1/2 flex flex-col items-center justify-center bg-white border border-gray-300 w-12 h-12 rounded hover:bg-gray-50 hover:border-gray-400 transition-all shadow-sm"
+          className="fixed right-4 top-1/2 flex flex-col items-center justify-center bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 w-12 h-12 rounded hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-400 transition-all shadow-sm"
           title="Lên đầu trang"
           onClick={scrollToTop}
         >
           <svg
-            className="w-5 h-5 text-gray-600"
+            className="w-5 h-5 text-gray-600 dark:text-gray-300"
             fill="none"
             stroke="currentColor"
             strokeWidth={2}
@@ -204,7 +204,7 @@ export const Footer = () => {
               strokeLinejoin="round"
             />
           </svg>
-          <span className="text-[10px] font-bold text-gray-600">TOP</span>
+          <span className="text-[10px] font-bold text-gray-600 dark:text-gray-300">TOP</span>
         </button>
       )}
     </footer>

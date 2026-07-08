@@ -23,20 +23,20 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
   return (
     <Card
       isPressable
-      className="py-4 cursor-pointer hover:scale-[1.02] transition-transform"
+      className="py-4 cursor-pointer hover:scale-[1.02] transition-transform dark:bg-gray-800 dark:border-gray-700"
       onPress={() => navigate(`/post/${post.slug}`)}
     >
       <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
         
-        <p className="text-tiny uppercase font-bold text-primary">
+        <p className="text-tiny uppercase font-bold text-primary dark:text-blue-400">
           {post.category?.name?.toUpperCase()}
         </p>
 
-        <small className="text-default-500">
+        <small className="text-default-500 dark:text-gray-400">
           {formatDate(post.publishedAt)}
         </small>
 
-        <h4 className="font-bold text-large mt-1 line-clamp-2 text-left">
+        <h4 className="font-bold text-large mt-1 line-clamp-2 text-left dark:text-white">
           {post.title}
         </h4>
       </CardHeader>
@@ -48,7 +48,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
           src={post.thumbnail || 'https://placehold.co/300x200'}
           width={300}
         />
-        <p className="mt-2 text-sm text-gray-500 line-clamp-3 text-left">
+        <p className="mt-2 text-sm text-gray-500 dark:text-gray-400 line-clamp-3 text-left">
           {post.summary}
         </p>
       </CardBody>

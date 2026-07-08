@@ -21,6 +21,7 @@ import AdminPage from './pages/AdminPage';
 
 import { AuthProvider } from './contexts/AuthContext';
 import { CategoryProvider } from './contexts/CategoryContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 
 function AppLayout() {
   const { pathname } = useLocation();
@@ -95,10 +96,12 @@ function AppLayout() {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <CategoryProvider>
-        <AppLayout />
-      </CategoryProvider>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <CategoryProvider>
+          <AppLayout />
+        </CategoryProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
